@@ -38,7 +38,6 @@ class FileConsumer extends AbstractConsumer
         if ($this->currentIndex != 0) $this->currentIndex++;
         $this->fullTarget = $this->targetPrefix . $this->targetName . ".log";
         $this->currentName = $this->targetName . "." . date("Y.m.d.H", time());
-        echo $this->currentIndex, $this->targetPrefix, "  ", $this->targetName, "  ", $this->fullTarget;
         $this->output = fopen($this->fullTarget, "a+");
         $this->changeOutputStream();
     }
@@ -103,7 +102,9 @@ class FileConsumer extends AbstractConsumer
     public function close()
     {
         if ($this->output == null) return true;
-        return fclose($this->output);
+        if(is_resource($this->output))
+            return fclose($this->output);
+        return true;
     }
 
     function __destruct()

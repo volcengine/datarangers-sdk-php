@@ -31,7 +31,7 @@ class CollectorConfig
             self::setSAVE(false);
             self::setSEND(true);
         }
-        if (in_array("domain", $config)) {
+        if (array_key_exists("domain", $config)) {
             self::setURL($config["domain"] . Constants::$APP_LOG_URL);
         } else if (self::isSend()) {
             throw new RangersSDKException(Constants::$DOMAIN_EXCPETION);
