@@ -10,8 +10,10 @@ namespace DataRangers;
 
 use DataRangers\Model\Event;
 use DataRangers\Model\Header;
+use DataRangers\Model\ItemsMethod;
 use DataRangers\Model\Message;
 use DataRangers\Model\ProfileMethod;
+use DataRangers\Model\Util\Constants;
 
 class EventCollector implements Collector
 {
@@ -105,5 +107,21 @@ class EventCollector implements Collector
     public function profileAppend($userUniqueId, $appId, $eventParams)
     {
         $this->profile($userUniqueId, $appId, ProfileMethod::APPEND, $eventParams);
+    }
+
+
+    public function itemSet($appId, $items)
+    {
+        $this->profile(Constants::$DEFAULT_USER, $appId, ItemsMethod::SET, $items);
+    }
+
+    public function itemUnset($appId, $items)
+    {
+        $this->profile(Constants::$DEFAULT_USER, $appId, ItemsMethod::SET_ONCE, $items);
+    }
+
+    public function itemDelete($appId, $items)
+    {
+        $this->profile(Constants::$DEFAULT_USER, $appId, ItemsMethod::DELETE, $items);
     }
 }

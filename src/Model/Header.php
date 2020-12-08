@@ -13,345 +13,659 @@ use DataRangers\Model\Util\Constants;
 class Header implements \JsonSerializable
 {
     private $aid;
-    private $appLanguage;
-    private $appName;
-    private $appRegion;
-    private $appVersion;
-    private $appVersionMinor;
-    private $appKey;
-    private $buildSerial;
+    private $app_id;
+    private $app_language;
+    private $app_name;
+    private $app_region;
+    private $app_version;
+    private $app_version_minor;
+    private $app_key;
+    private $build_serial;
     private $carrier;
     private $channel;
     private $clientudid;
-    private $cpuAbi;
+    private $cpu_abi;
     private $custom;
-    private $deviceId;
-    private $deviceBrand;
-    private $deviceManufacturer;
-    private $deviceModel;
-    private $deviceType;
-    private $displayName;
-    private $displayDensity;
-    private $densityDpi;
+    private $device_id;
+    private $device_brand;
+    private $device_manufacturer;
+    private $device_model;
+    private $device_type;
+    private $display_name;
+    private $display_density;
+    private $density_dpi;
     private $idfa;
-    private $installId;
+    private $install_id;
     private $language;
     private $openudid;
     private $os;
-    private $osApi;
-    private $osVersion;
+    private $os_api;
+    private $os_version;
     private $package;
     private $region;
-    private $sdkVersion;
+    private $sdk_version;
     private $timezone;
-    private $tzOffset;
-    private $tzName;
+    private $tz_offset;
+    private $tz_name;
     private $udid;
-    private $userUniqueId;
-    private $vendorId;
+    private $user_unique_id;
+    private $vendor_id;
 
     public function __construct()
     {
         $this->timezone = Constants::$TIME_ZONE_OFFSET;
-        $this->tzOffset = Constants::$TIME_ZONE_OFFSET_CURRENT;
-        $this->tzName = Constants::$TIME_ZONE_NAME;
-        $this->deviceId = 1;
+        $this->tz_offset = Constants::$TIME_ZONE_OFFSET_CURRENT;
+        $this->tz_name = Constants::$TIME_ZONE_NAME;
+        $this->device_id = 0;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAid()
+    {
+        return $this->aid;
     }
 
     /**
      * @param mixed $aid
      */
-    public function setAppId($aid)
+    public function setAid($aid): void
     {
         $this->aid = $aid;
+        $this->app_id = $aid;
     }
 
     /**
-     * @param mixed $appLanguage
+     * @return mixed
      */
-    public function setAppLanguage($appLanguage)
+    public function getAppId()
     {
-        $this->appLanguage = $appLanguage;
+        return $this->app_id;
     }
 
     /**
-     * @param mixed $appName
+     * @param mixed $app_id
      */
-    public function setAppName($appName)
+    public function setAppId($app_id): void
     {
-        $this->appName = $appName;
+        $this->app_id = $app_id;
     }
 
     /**
-     * @param mixed $appRegion
+     * @return mixed
      */
-    public function setAppRegion($appRegion)
+    public function getAppLanguage()
     {
-        $this->appRegion = $appRegion;
+        return $this->app_language;
     }
 
     /**
-     * @param mixed $appVersion
+     * @param mixed $app_language
      */
-    public function setAppVersion($appVersion)
+    public function setAppLanguage($app_language): void
     {
-        $this->appVersion = $appVersion;
+        $this->app_language = $app_language;
     }
 
     /**
-     * @param mixed $appVersionMinor
+     * @return mixed
      */
-    public function setAppVersionMinor($appVersionMinor)
+    public function getAppName()
     {
-        $this->appVersionMinor = $appVersionMinor;
+        return $this->app_name;
     }
 
     /**
-     * @param mixed $appKey
+     * @param mixed $app_name
      */
-    public function setAppKey($appKey)
+    public function setAppName($app_name): void
     {
-        $this->appKey = $appKey;
+        $this->app_name = $app_name;
     }
 
     /**
-     * @param mixed $buildSerial
+     * @return mixed
      */
-    public function setBuildSerial($buildSerial)
+    public function getAppRegion()
     {
-        $this->buildSerial = $buildSerial;
+        return $this->app_region;
+    }
+
+    /**
+     * @param mixed $app_region
+     */
+    public function setAppRegion($app_region): void
+    {
+        $this->app_region = $app_region;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAppVersion()
+    {
+        return $this->app_version;
+    }
+
+    /**
+     * @param mixed $app_version
+     */
+    public function setAppVersion($app_version): void
+    {
+        $this->app_version = $app_version;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAppVersionMinor()
+    {
+        return $this->app_version_minor;
+    }
+
+    /**
+     * @param mixed $app_version_minor
+     */
+    public function setAppVersionMinor($app_version_minor): void
+    {
+        $this->app_version_minor = $app_version_minor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAppKey()
+    {
+        return $this->app_key;
+    }
+
+    /**
+     * @param mixed $app_key
+     */
+    public function setAppKey($app_key): void
+    {
+        $this->app_key = $app_key;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBuildSerial()
+    {
+        return $this->build_serial;
+    }
+
+    /**
+     * @param mixed $build_serial
+     */
+    public function setBuildSerial($build_serial): void
+    {
+        $this->build_serial = $build_serial;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCarrier()
+    {
+        return $this->carrier;
     }
 
     /**
      * @param mixed $carrier
      */
-    public function setCarrier($carrier)
+    public function setCarrier($carrier): void
     {
         $this->carrier = $carrier;
     }
 
     /**
+     * @return mixed
+     */
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+
+    /**
      * @param mixed $channel
      */
-    public function setChannel($channel)
+    public function setChannel($channel): void
     {
         $this->channel = $channel;
     }
 
     /**
+     * @return mixed
+     */
+    public function getClientudid()
+    {
+        return $this->clientudid;
+    }
+
+    /**
      * @param mixed $clientudid
      */
-    public function setClientudid($clientudid)
+    public function setClientudid($clientudid): void
     {
         $this->clientudid = $clientudid;
     }
 
     /**
-     * @param mixed $cpuAbi
+     * @return mixed
      */
-    public function setCpuAbi($cpuAbi)
+    public function getCpuAbi()
     {
-        $this->cpuAbi = $cpuAbi;
+        return $this->cpu_abi;
+    }
+
+    /**
+     * @param mixed $cpu_abi
+     */
+    public function setCpuAbi($cpu_abi): void
+    {
+        $this->cpu_abi = $cpu_abi;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustom()
+    {
+        return $this->custom;
     }
 
     /**
      * @param mixed $custom
      */
-    public function setCustom($custom)
+    public function setCustom($custom): void
     {
         $this->custom = $custom;
     }
 
     /**
-     * @param mixed $deviceId
+     * @return int
      */
-    public function setDeviceId($deviceId)
+    public function getDeviceId(): int
     {
-        $this->deviceId = $deviceId;
+        return $this->device_id;
     }
 
     /**
-     * @param mixed $deviceBrand
+     * @param int $device_id
      */
-    public function setDeviceBrand($deviceBrand)
+    public function setDeviceId(int $device_id): void
     {
-        $this->deviceBrand = $deviceBrand;
+        $this->device_id = $device_id;
     }
 
     /**
-     * @param mixed $deviceManufacturer
+     * @return mixed
      */
-    public function setDeviceManufacturer($deviceManufacturer)
+    public function getDeviceBrand()
     {
-        $this->deviceManufacturer = $deviceManufacturer;
+        return $this->device_brand;
     }
 
     /**
-     * @param mixed $deviceModel
+     * @param mixed $device_brand
      */
-    public function setDeviceModel($deviceModel)
+    public function setDeviceBrand($device_brand): void
     {
-        $this->deviceModel = $deviceModel;
+        $this->device_brand = $device_brand;
     }
 
     /**
-     * @param mixed $deviceType
+     * @return mixed
      */
-    public function setDeviceType($deviceType)
+    public function getDeviceManufacturer()
     {
-        $this->deviceType = $deviceType;
+        return $this->device_manufacturer;
     }
 
     /**
-     * @param mixed $displayName
+     * @param mixed $device_manufacturer
      */
-    public function setDisplayName($displayName)
+    public function setDeviceManufacturer($device_manufacturer): void
     {
-        $this->displayName = $displayName;
+        $this->device_manufacturer = $device_manufacturer;
     }
 
     /**
-     * @param mixed $displayDensity
+     * @return mixed
      */
-    public function setDisplayDensity($displayDensity)
+    public function getDeviceModel()
     {
-        $this->displayDensity = $displayDensity;
+        return $this->device_model;
     }
 
     /**
-     * @param mixed $densityDpi
+     * @param mixed $device_model
      */
-    public function setDensityDpi($densityDpi)
+    public function setDeviceModel($device_model): void
     {
-        $this->densityDpi = $densityDpi;
+        $this->device_model = $device_model;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeviceType()
+    {
+        return $this->device_type;
+    }
+
+    /**
+     * @param mixed $device_type
+     */
+    public function setDeviceType($device_type): void
+    {
+        $this->device_type = $device_type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDisplayName()
+    {
+        return $this->display_name;
+    }
+
+    /**
+     * @param mixed $display_name
+     */
+    public function setDisplayName($display_name): void
+    {
+        $this->display_name = $display_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDisplayDensity()
+    {
+        return $this->display_density;
+    }
+
+    /**
+     * @param mixed $display_density
+     */
+    public function setDisplayDensity($display_density): void
+    {
+        $this->display_density = $display_density;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDensityDpi()
+    {
+        return $this->density_dpi;
+    }
+
+    /**
+     * @param mixed $density_dpi
+     */
+    public function setDensityDpi($density_dpi): void
+    {
+        $this->density_dpi = $density_dpi;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdfa()
+    {
+        return $this->idfa;
     }
 
     /**
      * @param mixed $idfa
      */
-    public function setIdfa($idfa)
+    public function setIdfa($idfa): void
     {
         $this->idfa = $idfa;
     }
 
     /**
-     * @param mixed $installId
+     * @return mixed
      */
-    public function setInstallId($installId)
+    public function getInstallId()
     {
-        $this->installId = $installId;
+        return $this->install_id;
+    }
+
+    /**
+     * @param mixed $install_id
+     */
+    public function setInstallId($install_id): void
+    {
+        $this->install_id = $install_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLanguage()
+    {
+        return $this->language;
     }
 
     /**
      * @param mixed $language
      */
-    public function setLanguage($language)
+    public function setLanguage($language): void
     {
         $this->language = $language;
     }
 
     /**
+     * @return mixed
+     */
+    public function getOpenudid()
+    {
+        return $this->openudid;
+    }
+
+    /**
      * @param mixed $openudid
      */
-    public function setOpenudid($openudid)
+    public function setOpenudid($openudid): void
     {
         $this->openudid = $openudid;
     }
 
     /**
+     * @return mixed
+     */
+    public function getOs()
+    {
+        return $this->os;
+    }
+
+    /**
      * @param mixed $os
      */
-    public function setOs($os)
+    public function setOs($os): void
     {
         $this->os = $os;
     }
 
     /**
-     * @param mixed $osApi
+     * @return mixed
      */
-    public function setOsApi($osApi)
+    public function getOsApi()
     {
-        $this->osApi = $osApi;
+        return $this->os_api;
     }
 
     /**
-     * @param mixed $osVersion
+     * @param mixed $os_api
      */
-    public function setOsVersion($osVersion)
+    public function setOsApi($os_api): void
     {
-        $this->osVersion = $osVersion;
+        $this->os_api = $os_api;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOsVersion()
+    {
+        return $this->os_version;
+    }
+
+    /**
+     * @param mixed $os_version
+     */
+    public function setOsVersion($os_version): void
+    {
+        $this->os_version = $os_version;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPackage()
+    {
+        return $this->package;
     }
 
     /**
      * @param mixed $package
      */
-    public function setPackage($package)
+    public function setPackage($package): void
     {
         $this->package = $package;
     }
 
     /**
+     * @return mixed
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+
+    /**
      * @param mixed $region
      */
-    public function setRegion($region)
+    public function setRegion($region): void
     {
         $this->region = $region;
     }
 
     /**
-     * @param mixed $sdkVersion
+     * @return mixed
      */
-    public function setSdkVersion($sdkVersion)
+    public function getSdkVersion()
     {
-        $this->sdkVersion = $sdkVersion;
+        return $this->sdk_version;
     }
 
     /**
-     * @param mixed $timezone
+     * @param mixed $sdk_version
      */
-    public function setTimezone($timezone)
+    public function setSdkVersion($sdk_version): void
+    {
+        $this->sdk_version = $sdk_version;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimezone(): int
+    {
+        return $this->timezone;
+    }
+
+    /**
+     * @param int $timezone
+     */
+    public function setTimezone(int $timezone): void
     {
         $this->timezone = $timezone;
     }
 
     /**
-     * @param string $tzOffset
+     * @return int
      */
-    public function setTzOffset($tzOffset)
+    public function getTzOffset(): int
     {
-        $this->tzOffset = $tzOffset;
+        return $this->tz_offset;
     }
 
     /**
-     * @param string $tzName
+     * @param int $tz_offset
      */
-    public function setTzName($tzName)
+    public function setTzOffset(int $tz_offset): void
     {
-        $this->tzName = $tzName;
+        $this->tz_offset = $tz_offset;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTzName(): string
+    {
+        return $this->tz_name;
+    }
+
+    /**
+     * @param string $tz_name
+     */
+    public function setTzName(string $tz_name): void
+    {
+        $this->tz_name = $tz_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUdid()
+    {
+        return $this->udid;
     }
 
     /**
      * @param mixed $udid
      */
-    public function setUdid($udid)
+    public function setUdid($udid): void
     {
         $this->udid = $udid;
     }
 
     /**
-     * @param mixed $userUniqueId
+     * @return mixed
      */
-    public function setUserUniqueId($userUniqueId)
+    public function getUserUniqueId()
     {
-        $this->userUniqueId = $userUniqueId;
+        return $this->user_unique_id;
     }
 
     /**
-     * @param mixed $vendorId
+     * @param mixed $user_unique_id
      */
-    public function setVendorId($vendorId)
+    public function setUserUniqueId($user_unique_id): void
     {
-        $this->vendorId = $vendorId;
+        $this->user_unique_id = $user_unique_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVendorId()
+    {
+        return $this->vendor_id;
+    }
+
+    /**
+     * @param mixed $vendor_id
+     */
+    public function setVendorId($vendor_id): void
+    {
+        $this->vendor_id = $vendor_id;
     }
 
     public function jsonSerialize()
@@ -361,42 +675,42 @@ class Header implements \JsonSerializable
             $data["app_id"] = $this->aid;
             $data["aid"] = $this->aid;
         }
-        if ($this->appLanguage != null) $data["app_language"] = $this->appLanguage;
-        if ($this->appName != null) $data["app_name"] = $this->appName;
-        if ($this->appRegion != null) $data["app_region"] = $this->appRegion;
-        if ($this->appVersion != null) $data["app_version"] = $this->appVersion;
-        if ($this->appVersionMinor != null) $data["app_version_minor"] = $this->appVersionMinor;
-        if ($this->appKey != null) $data["app_key"] = $this->appKey;
-        if ($this->buildSerial != null) $data["build_serial"] = $this->buildSerial;
+        if ($this->app_language != null) $data["app_language"] = $this->app_language;
+        if ($this->app_name != null) $data["app_name"] = $this->app_name;
+        if ($this->app_region != null) $data["app_region"] = $this->app_region;
+        if ($this->app_version != null) $data["app_version"] = $this->app_version;
+        if ($this->app_version_minor != null) $data["app_version_minor"] = $this->app_version_minor;
+        if ($this->app_key != null) $data["app_key"] = $this->app_key;
+        if ($this->build_serial != null) $data["build_serial"] = $this->build_serial;
         if ($this->carrier != null) $data["carrier"] = $this->carrier;
         if ($this->channel != null) $data["channel"] = $this->channel;
         if ($this->clientudid != null) $data["clientudid"] = $this->clientudid;
-        if ($this->cpuAbi != null) $data["cpu_abi"] = $this->cpuAbi;
+        if ($this->cpu_abi != null) $data["cpu_abi"] = $this->cpu_abi;
         if ($this->custom != null) $data["custom"] = $this->custom;
-        if ($this->deviceId != null) $data["device_id"] = $this->deviceId;
-        if ($this->deviceBrand != null) $data["device_brand"] = $this->deviceBrand;
-        if ($this->deviceManufacturer != null) $data["device_manufacturer"] = $this->deviceManufacturer;
-        if ($this->deviceModel != null) $data["device_model"] = $this->deviceModel;
-        if ($this->deviceType != null) $data["device_type"] = $this->deviceType;
-        if ($this->displayName != null) $data["display_name"] = $this->displayName;
-        if ($this->displayDensity != null) $data["display_density"] = $this->displayDensity;
-        if ($this->densityDpi != null) $data["density_dpi"] = $this->densityDpi;
+        if ($this->device_id != null) $data["device_id"] = $this->device_id;
+        if ($this->device_brand != null) $data["device_brand"] = $this->device_brand;
+        if ($this->device_manufacturer != null) $data["device_manufacturer"] = $this->device_manufacturer;
+        if ($this->device_model != null) $data["device_model"] = $this->device_model;
+        if ($this->device_type != null) $data["device_type"] = $this->device_type;
+        if ($this->display_name != null) $data["display_name"] = $this->display_name;
+        if ($this->display_density != null) $data["display_density"] = $this->display_density;
+        if ($this->density_dpi != null) $data["density_dpi"] = $this->density_dpi;
         if ($this->idfa != null) $data["idfa"] = $this->idfa;
-        if ($this->installId != null) $data["install_id"] = $this->installId;
+        if ($this->install_id != null) $data["install_id"] = $this->install_id;
         if ($this->language != null) $data["language"] = $this->language;
         if ($this->openudid != null) $data["openudid"] = $this->openudid;
         if ($this->os != null) $data["os"] = $this->os;
-        if ($this->osApi != null) $data["os_api"] = $this->osApi;
-        if ($this->osVersion != null) $data["os_version"] = $this->osVersion;
+        if ($this->os_api != null) $data["os_api"] = $this->os_api;
+        if ($this->os_version != null) $data["os_version"] = $this->os_version;
         if ($this->package != null) $data["package"] = $this->package;
         if ($this->region != null) $data["region"] = $this->region;
-        if ($this->sdkVersion != null) $data["sdk_version"] = $this->sdkVersion;
+        if ($this->sdk_version != null) $data["sdk_version"] = $this->sdk_version;
         if ($this->timezone != null) $data["timezone"] = $this->timezone;
-        if ($this->tzOffset != null) $data["tz_offset"] = $this->tzOffset;
-        if ($this->tzName != null) $data["tz_name"] = $this->tzName;
+        if ($this->tz_offset != null) $data["tz_offset"] = $this->tz_offset;
+        if ($this->tz_name != null) $data["tz_name"] = $this->tz_name;
         if ($this->udid != null) $data["udid"] = $this->udid;
-        if ($this->userUniqueId != null) $data["user_unique_id"] = $this->userUniqueId;
-        if ($this->vendorId != null) $data["vendor_id"] = $this->vendorId;
+        if ($this->user_unique_id != null) $data["user_unique_id"] = $this->user_unique_id;
+        if ($this->vendor_id != null) $data["vendor_id"] = $this->vendor_id;
         return $data;
     }
 }

@@ -63,4 +63,8 @@ interface Collector
      * @return mixed
      */
     public function profileAppend($userUniqueId, $appId, $eventParams);
+
+    public function itemSet($appId, $items);
+    public function itemUnset($appId, $items);
+    public function itemDelete($appId, $items);
 }

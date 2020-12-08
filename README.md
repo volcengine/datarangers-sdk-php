@@ -13,11 +13,8 @@ datarangers-sdk-php是 [DataRangers](https://datarangers.com.cn/) 的用户行�
 
     ```json
     {
-    "repositories": {
-            "local": {
-                "type": "path",
-                "url": "php sdk path"
-            }
+    "require": {
+            "datarangers/datarangers": "dev-dev"
         }
     }
     ```

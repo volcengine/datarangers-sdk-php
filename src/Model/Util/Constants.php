@@ -18,4 +18,5 @@ class Constants
     public static $APP_LOG_URL = "/sdk/log";
     public static $DOMAIN_EXCPETION = "please set domain!";
     public static $INIT_EXCEPTION = "please init sdk before using";
+    public static $DEFAULT_USER="__rangers";
 }
