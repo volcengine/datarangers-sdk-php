@@ -37,7 +37,6 @@ class HttpRequests
                 break;
         }
         $content = curl_exec($ch);
-        var_dump($content);
         return $content;
         curl_close($ch);
     }
