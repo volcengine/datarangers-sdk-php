@@ -1,6 +1,7 @@
 <?php
 
 require '../vendor/autoload.php';
+
 use DataRangers\AppEventCollector;
 use DataRangers\CollectorConfig;
 use DataRangers\HttpConsumer;
@@ -14,5 +15,5 @@ CollectorConfig::init_datarangers_collector([
     ]
 ]);
 $rc = new AppEventCollector(new HttpConsumer());
-$rc->sendEvent("uuid16981", 10000002, null, ["__profile_set", "php_event"],
+$rc->sendEvent("uuid16981", 10000001, null, ["__profile_set", "php_event"],
     [["php_name" => "php", "php_version" => "5.6"], ["php_name" => "php", "php_version" => "5.6"]]);
