@@ -23,6 +23,8 @@ interface Collector
      */
     public function sendEvent($userUniqueId, $appId, $custom, $eventName, $eventParams);
 
+    public function sendUserDefineEvent($header,$userUniqueId, $appId, $custom, $eventName, $eventParams);
+
     /**
      * set user profile
      * @param $userUniqueId string

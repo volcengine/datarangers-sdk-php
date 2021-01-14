@@ -36,6 +36,12 @@ class EventCollector implements Collector
         $header->setAppId($appId);
         $header->setUserUniqueId($userUniqueId);
         if ($custom != null) $header->setCustom($custom);
+        return $this->sendUserDefineEvent($header,$userUniqueId,$appId, $custom, $eventName, $eventParams);
+    }
+
+    public function sendUserDefineEvent($header,$userUniqueId, $appId, $custom, $eventName, $eventParams){
+        $header->setAppId($appId);
+        $header->setUserUniqueId($userUniqueId);
         $events = [];
         if (is_array($eventName) && is_array($eventParams)) {
             $events = array_map(function ($event_name, $event_params) use ($userUniqueId) {
