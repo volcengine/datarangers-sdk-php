@@ -16,7 +16,7 @@ class CollectorConfig
     public static $SEND;
     public static $LOG_FILE_PATH;
     public static $LOG_FILE_NAME;
-    public static $LOG_MAX_BYTES;
+    public static $LOG_MAX_MB;
     public static $URL;
     public static $SEND_HEADER;
     public static $INIT_FLAG;
@@ -24,10 +24,10 @@ class CollectorConfig
 
     public static function init_datarangers_collector($config)
     {
-        if(self::get($config, "save", false)){
+        if (self::get($config, "save", false)) {
             self::setSAVE(true);
             self::setSEND(false);
-        }else{
+        } else {
             self::setSAVE(false);
             self::setSEND(true);
         }
@@ -39,7 +39,7 @@ class CollectorConfig
 
         self::setLogFilePath(self::get($config, "logger_file_prefix", "logs/datarangers/"));
         self::setLogFileName(self::get($config, "logger_file_name", "datarangers"));
-        self::setLogMaxBytes(self::get($config, "log_max_bytes", 1024 * 1024 * 10));
+        self::setLogMaxMB(self::get($config, "log_max_mb", 100));
         self::setSenderHeader(self::get($config, "headers", []));
         self::setHttpTimeout(self::get($config, "http_timeout", 1000));
         self::$INIT_FLAG = true;
@@ -124,17 +124,17 @@ class CollectorConfig
     /**
      * @return mixed
      */
-    public static function getLogMaxBytes()
+    public static function getLogMaxMB()
     {
-        return self::$LOG_MAX_BYTES;
+        return self::$LOG_MAX_MB;
     }
 
     /**
-     * @param mixed $LOG_MAX_BYTES
+     * @param mixed $LOG_MAX_MB
      */
-    public static function setLogMaxBytes($LOG_MAX_BYTES)
+    public static function setLogMaxMB($LOG_MAX_MB)
     {
-        self::$LOG_MAX_BYTES = $LOG_MAX_BYTES;
+        self::$LOG_MAX_MB = $LOG_MAX_MB;
     }
 
     /**

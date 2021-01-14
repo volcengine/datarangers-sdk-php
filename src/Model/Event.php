@@ -71,7 +71,7 @@ class Event implements \JsonSerializable
     {
         if ($key == "items" && is_array($value)) {
             foreach ($value as $index => $item_part) {
-                if (is_array($item_part)&&array_key_exists("item_id", $item_part) && array_key_exists("item_name", $item_part)) {
+                if (is_array($item_part) && array_key_exists("item_id", $item_part) && array_key_exists("item_name", $item_part)) {
                     if (!array_key_exists($item_part["item_name"], $this->items)) {
                         $this->items[$item_part["item_name"]] = [];
                     }
@@ -79,9 +79,11 @@ class Event implements \JsonSerializable
                 }
             }
         } else {
-            if(gettype($value)=="double"){
+            if (gettype($value) == "double") {
                 $this->params[$key] = floatval($value);
-            }else{
+            } else if ($key == "session_id") {
+                $this->setSessionId($value);
+            } else {
                 $this->params[$key] = $value;
             }
         }
@@ -169,6 +171,7 @@ class Event implements \JsonSerializable
         if ($this->local_time_ms != null) $data["local_time_ms"] = $this->local_time_ms;
         if ($this->user_id != null) $data["user_id"] = $this->user_id;
         if ($this->datetime != null) $data["datetime"] = $this->datetime;
+        if ($this->session_id != null) $data["session_id"] = $this->session_id;
         return $data;
     }
 }

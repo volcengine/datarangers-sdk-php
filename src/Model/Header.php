@@ -21,6 +21,7 @@ class Header implements \JsonSerializable
     private $app_version_minor;
     private $app_key;
     private $build_serial;
+    private $client_ip;
     private $carrier;
     private $channel;
     private $clientudid;
@@ -668,6 +669,22 @@ class Header implements \JsonSerializable
         $this->vendor_id = $vendor_id;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getClientIp()
+    {
+        return $this->client_ip;
+    }
+
+    /**
+     * @param mixed $client_ip
+     */
+    public function setClientIp($client_ip): void
+    {
+        $this->client_ip = $client_ip;
+    }
+
     public function jsonSerialize()
     {
         $data = [];
@@ -680,6 +697,7 @@ class Header implements \JsonSerializable
         if ($this->app_region != null) $data["app_region"] = $this->app_region;
         if ($this->app_version != null) $data["app_version"] = $this->app_version;
         if ($this->app_version_minor != null) $data["app_version_minor"] = $this->app_version_minor;
+        if ($this->client_ip != null) $data["client_ip"] = $this->client_ip;
         if ($this->app_key != null) $data["app_key"] = $this->app_key;
         if ($this->build_serial != null) $data["build_serial"] = $this->build_serial;
         if ($this->carrier != null) $data["carrier"] = $this->carrier;

@@ -24,7 +24,6 @@ class HttpRequests
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         $sendBody = json_encode($body, JSON_PRESERVE_ZERO_FRACTION);
-        echo $sendBody . "\n";
         switch ($method) {
             case "GET":
                 curl_setopt($ch, CURLOPT_HTTPGET, true);

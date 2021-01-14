@@ -35,7 +35,7 @@ class FileConsumer extends AbstractConsumer
             mkdir($this->targetPrefix, 0700, true);
         }
         $this->currentIndex = $this->setCurrentIndex();
-        if ($this->currentIndex != 0) $this->currentIndex++;
+        $this->currentIndex++;
         $this->fullTarget = $this->targetPrefix . $this->targetName . ".log";
         $this->currentName = $this->targetName . "." . date("Y.m.d.H", time());
         $this->output = fopen($this->fullTarget, "a+");
@@ -63,7 +63,8 @@ class FileConsumer extends AbstractConsumer
 
     private function changeOutputStream()
     {
-        if (filesize($this->fullTarget) >= CollectorConfig::getLogMaxBytes()) {
+        clearstatcache(true, $this->fullTarget);
+        if ((filesize($this->fullTarget) >> 20) >= CollectorConfig::getLogMaxMB()) {
             $currentHour = $this->targetName . "." . date("Y.m.d.H", time());
             if (strcmp($currentHour, $this->currentName) == 0) {
                 if (!rename($this->fullTarget, $this->targetPrefix . $currentHour . "." . $this->currentIndex . ".log")) {
@@ -82,8 +83,8 @@ class FileConsumer extends AbstractConsumer
                 $this->currentName = $currentHour;
                 $this->currentIndex = 0;
             }
-            $this->count = 0;
         }
+        $this->count = 0;
     }
 
 
@@ -92,7 +93,7 @@ class FileConsumer extends AbstractConsumer
         if ($msg != null) {
             $state = fwrite($this->output, json_encode($msg, JSON_PRESERVE_ZERO_FRACTION) . "\n");
             $this->count++;
-            if ($this->count > 10000) {
+            if ($this->count > 50000) {
                 $this->changeOutputStream();
             }
             return $state;
