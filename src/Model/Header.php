@@ -671,9 +671,9 @@ class Header implements \JsonSerializable
     public function jsonSerialize()
     {
         $data = [];
-        if ($this->aid != null) {
-            $data["app_id"] = $this->aid;
-            $data["aid"] = $this->aid;
+        if ($this->app_id != null) {
+            $data["app_id"] = $this->app_id;
+            $data["aid"] = $this->app_id;
         }
         if ($this->app_language != null) $data["app_language"] = $this->app_language;
         if ($this->app_name != null) $data["app_name"] = $this->app_name;

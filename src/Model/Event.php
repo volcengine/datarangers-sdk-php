@@ -79,7 +79,11 @@ class Event implements \JsonSerializable
                 }
             }
         } else {
-            $this->params[$key] = $value;
+            if(gettype($value)=="double"){
+                $this->params[$key] = floatval($value);
+            }else{
+                $this->params[$key] = $value;
+            }
         }
     }
 

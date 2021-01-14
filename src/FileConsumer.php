@@ -90,7 +90,7 @@ class FileConsumer extends AbstractConsumer
     public function send($msg)
     {
         if ($msg != null) {
-            $state = fwrite($this->output, json_encode($msg) . "\n");
+            $state = fwrite($this->output, json_encode($msg, JSON_PRESERVE_ZERO_FRACTION) . "\n");
             $this->count++;
             if ($this->count > 10000) {
                 $this->changeOutputStream();
@@ -102,7 +102,7 @@ class FileConsumer extends AbstractConsumer
     public function close()
     {
         if ($this->output == null) return true;
-        if(is_resource($this->output))
+        if (is_resource($this->output))
             return fclose($this->output);
         return true;
     }

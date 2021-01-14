@@ -56,7 +56,7 @@ class EventCollector implements Collector
         $message->setAppId($appId);
         $message->setAppType($this->appType);
         $message->setHeader($header);
-        $this->consumer->send($message);
+        return $this->consumer->send($message);
     }
 
     public function profile($userUniqueId, $appId, $eventName, $eventParams)
@@ -110,17 +110,21 @@ class EventCollector implements Collector
     }
 
 
-    public function itemSet($appId, $items)
+    public function itemSet($appId, $itemName, $items)
     {
         $this->profile(Constants::$DEFAULT_USER, $appId, ItemsMethod::SET, $items);
     }
 
-    public function itemUnset($appId, $items)
+    public function itemUnset($appId, $itemName, $itemId, $items)
     {
-        $this->profile(Constants::$DEFAULT_USER, $appId, ItemsMethod::SET_ONCE, $items);
+        $item_params = ["item_id" => $itemId, "item_name" => $itemName];
+        foreach ($items as $item) {
+            $item_params[$item] = "php";
+        }
+        $this->profile(Constants::$DEFAULT_USER, $appId, ItemsMethod::UNSET, $item_params);
     }
 
-    public function itemDelete($appId, $items)
+    public function itemDelete($appId, $itemName, $items)
     {
         $this->profile(Constants::$DEFAULT_USER, $appId, ItemsMethod::DELETE, $items);
     }

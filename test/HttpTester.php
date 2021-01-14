@@ -17,3 +17,6 @@ CollectorConfig::init_datarangers_collector([
 $rc = new AppEventCollector(new HttpConsumer());
 $rc->sendEvent("uuid16981", 10000001, null, ["__profile_set", "php_event"],
     [["php_name" => "php", "php_version" => "5.6"], ["php_name" => "php", "php_version" => "5.6"]]);
+
+echo $rc->sendEvent("uuid16981", 10000004, null, "php_event",
+    ["php_name" => "php", "php_version" => "5.6", "test_float_param" => floatval(5)]);

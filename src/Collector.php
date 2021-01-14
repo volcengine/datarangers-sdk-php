@@ -64,7 +64,20 @@ interface Collector
      */
     public function profileAppend($userUniqueId, $appId, $eventParams);
 
-    public function itemSet($appId, $items);
-    public function itemUnset($appId, $items);
-    public function itemDelete($appId, $items);
+    /**
+     * @param $appId int app id
+     * @param $itemName string item name
+     * @param $items array item example:["item_id"=>"0001","item_name"=>"book","item_price"=>5.0]
+     * @return mixed
+     */
+    public function itemSet($appId, $itemName, $items);
+
+    /**
+     * @param $appId int
+     * @param $itemName string
+     * @param $itemId string
+     * @param $items array example: ["param1","param2","param3"]
+     * @return mixed
+     */
+    public function itemUnset($appId, $itemName, $itemId, $items);
 }
