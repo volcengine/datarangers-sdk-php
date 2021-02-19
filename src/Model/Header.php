@@ -51,6 +51,23 @@ class Header implements \JsonSerializable
     private $udid;
     private $user_unique_id;
     private $vendor_id;
+    private $ssid;
+
+    /**
+     * @return mixed
+     */
+    public function getSsid()
+    {
+        return $this->ssid;
+    }
+
+    /**
+     * @param mixed $ssid
+     */
+    public function setSsid($ssid): void
+    {
+        $this->ssid = $ssid;
+    }
 
     public function __construct()
     {
@@ -705,7 +722,7 @@ class Header implements \JsonSerializable
         if ($this->clientudid != null) $data["clientudid"] = $this->clientudid;
         if ($this->cpu_abi != null) $data["cpu_abi"] = $this->cpu_abi;
         if ($this->custom != null) $data["custom"] = $this->custom;
-        if ($this->device_id != null) $data["device_id"] = $this->device_id;
+        if ($this->device_id != null) $data["device_id"] = $this->device_id == 1 ? 0:$this->device_id;
         if ($this->device_brand != null) $data["device_brand"] = $this->device_brand;
         if ($this->device_manufacturer != null) $data["device_manufacturer"] = $this->device_manufacturer;
         if ($this->device_model != null) $data["device_model"] = $this->device_model;
@@ -729,6 +746,7 @@ class Header implements \JsonSerializable
         if ($this->udid != null) $data["udid"] = $this->udid;
         if ($this->user_unique_id != null) $data["user_unique_id"] = $this->user_unique_id;
         if ($this->vendor_id != null) $data["vendor_id"] = $this->vendor_id;
+        if ($this->ssid != null) $data["ssid"] = $this->ssid;
         return $data;
     }
 }
