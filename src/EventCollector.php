@@ -10,8 +10,10 @@ namespace DataRangers;
 
 use DataRangers\Model\Event;
 use DataRangers\Model\Header;
+use DataRangers\Model\ItemsMethod;
 use DataRangers\Model\Message;
 use DataRangers\Model\ProfileMethod;
+use DataRangers\Model\Util\Constants;
 
 class EventCollector implements Collector
 {
@@ -24,28 +26,45 @@ class EventCollector implements Collector
      */
     public function __construct($consumer, $appType)
     {
+        if ($consumer == null) {
+            if (CollectorConfig::isSave()) {
+                $consumer = new FileConsumer();
+            } else {
+                $consumer = new HttpConsumer();
+            }
+        }
         $this->consumer = $consumer;
         $this->appType = $appType;
     }
 
-    public function sendEvent($userUniqueId, $appId, $custom, $eventName, $eventParams)
+    public function sendEvent($userUniqueId, $appId, $custom, $eventName, $eventParams, $items = null)
     {
         $header = new Header();
         $header->setAppId($appId);
         $header->setUserUniqueId($userUniqueId);
         if ($custom != null) $header->setCustom($custom);
+        return $this->sendUserDefineEvent($header, $userUniqueId, $appId, $custom, $eventName, $eventParams);
+    }
+
+    public function sendUserDefineEvent($header, $userUniqueId, $appId, $custom, $eventName, $eventParams, $items = null)
+    {
+        $header->setAppId($appId);
+        $header->setUserUniqueId($userUniqueId);
         $events = [];
         if (is_array($eventName) && is_array($eventParams)) {
-            $events = array_map(function ($event_name, $event_params) use ($userUniqueId) {
+            if($items==null)$items=array();
+            $events = array_map(function ($event_name, $event_params, $item) use ($userUniqueId) {
                 $event = new Event($userUniqueId);
                 $event->setEvent($event_name);
                 $event->setParams($event_params);
+                $event->addItems($item);
                 return $event;
-            }, $eventName, $eventParams);
+            }, $eventName, $eventParams,$items);
         } else {
             $event = new Event($userUniqueId);
             $event->setEvent($eventName);
             $event->setParams($eventParams);
+            $event->addItems($items);
             $events[] = $event;
         }
         $message = new Message();
@@ -54,7 +73,7 @@ class EventCollector implements Collector
         $message->setAppId($appId);
         $message->setAppType($this->appType);
         $message->setHeader($header);
-        $this->consumer->send($message);
+        return $this->consumer->send($message);
     }
 
     public function profile($userUniqueId, $appId, $eventName, $eventParams)
@@ -105,5 +124,25 @@ class EventCollector implements Collector
     public function profileAppend($userUniqueId, $appId, $eventParams)
     {
         $this->profile($userUniqueId, $appId, ProfileMethod::APPEND, $eventParams);
+    }
+
+
+    public function itemSet($appId, $itemName, $items)
+    {
+        $this->profile(Constants::$DEFAULT_USER, $appId, ItemsMethod::SET, $items);
+    }
+
+    public function itemUnset($appId, $itemName, $itemId, $items)
+    {
+        $item_params = ["item_id" => $itemId, "item_name" => $itemName];
+        foreach ($items as $item) {
+            $item_params[$item] = "php";
+        }
+        $this->profile(Constants::$DEFAULT_USER, $appId, ItemsMethod::UNSET, $item_params);
+    }
+
+    public function itemDelete($appId, $itemName, $items)
+    {
+        $this->profile(Constants::$DEFAULT_USER, $appId, ItemsMethod::DELETE, $items);
     }
 }

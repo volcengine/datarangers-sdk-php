@@ -14,8 +14,8 @@ class AppEventCollector extends EventCollector
     /**
      * AppEventCollector constructor.
      */
-    public function __construct($consumer)
+    public function __construct()
     {
-        parent::__construct($consumer, "app");
+        parent::__construct(null, "app");
     }
 }

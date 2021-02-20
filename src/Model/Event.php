@@ -13,77 +13,168 @@ class Event implements \JsonSerializable
 {
     private $event;
     private $params;
-    private $sessionId;
-    private $localTimeMs;
-    private $dateTime;
-    private $userId;
+    private $session_id;
+    private $local_time_ms;
+    private $datetime;
+    private $user_id;
+    private $items;
 
     /**
      * Event constructor.
      */
-    public function __construct($userId)
+    public function __construct($user_id)
     {
-        $this->localTimeMs = (int)(microtime(true) * 1000);
-        $this->dateTime = date("Y-m-d H:i:s", time());
-        $this->userId = $userId;
+        $this->local_time_ms = (int)(microtime(true) * 1000);
+        $this->datetime = date("Y-m-d H:i:s", time());
+        $this->user_id = $user_id;
+        $this->items = [];
+        $this->params = [];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEvent()
+    {
+        return $this->event;
     }
 
     /**
      * @param mixed $event
      */
-    public function setEvent($event)
+    public function setEvent($event): void
     {
         $this->event = $event;
     }
 
     /**
+     * @return mixed
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
      * @param mixed $params
      */
-    public function setParams($params)
+    public function setParams($params): void
     {
-        $this->params = $params;
+        if (is_array($params)) {
+            foreach ($params as $key => $value) {
+                $this->addParams($key, $value);
+            }
+        }
+    }
+
+    public function addItems($items): void
+    {
+        if ($items != null) {
+            foreach ($items as $index => $item_part) {
+                if (is_array($item_part) && array_key_exists("item_id", $item_part) && array_key_exists("item_name", $item_part)) {
+                    if (!array_key_exists($item_part["item_name"], $this->items)) {
+                        $this->items[$item_part["item_name"]] = [];
+                    }
+                    $this->items[$item_part["item_name"]][] = $item_part["item_id"];
+                }
+            }
+        }
+    }
+
+    public function addParams($key, $value): void
+    {
+        if (gettype($value) == "double") {
+            $this->params[$key] = floatval($value);
+        } else if ($key == "session_id") {
+            $this->setSessionId($value);
+        } else {
+            $this->params[$key] = $value;
+        }
     }
 
     /**
-     * @param mixed $sessionId
+     * @return mixed
      */
-    public function setSessionId($sessionId)
+    public function getSessionId()
     {
-        $this->sessionId = $sessionId;
+        return $this->session_id;
     }
 
     /**
-     * @param mixed $localTimeMs
+     * @param mixed $session_id
      */
-    public function setLocalTimeMs($localTimeMs)
+    public function setSessionId($session_id): void
     {
-        $this->localTimeMs = $localTimeMs;
+        $this->session_id = $session_id;
     }
 
     /**
-     * @param mixed $dateTime
+     * @return int
      */
-    public function setDateTime($dateTime)
+    public function getLocalTimeMs(): int
     {
-        $this->dateTime = $dateTime;
+        return $this->local_time_ms;
     }
 
     /**
-     * @param mixed $userId
+     * @param int $local_time_ms
      */
-    public function setUserId($userId)
+    public function setLocalTimeMs(int $local_time_ms): void
     {
-        $this->userId = $userId;
+        $this->local_time_ms = $local_time_ms;
+    }
+
+    /**
+     * @return false|string
+     */
+    public function getDatetime()
+    {
+        return $this->datetime;
+    }
+
+    /**
+     * @param false|string $datetime
+     */
+    public function setDatetime($datetime): void
+    {
+        $this->datetime = $datetime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param mixed $user_id
+     */
+    public function setUserId($user_id): void
+    {
+        $this->user_id = $user_id;
     }
 
     public function jsonSerialize()
     {
         $data = [];
         if ($this->event != null) $data["event"] = $this->event;
+        if (count($this->items) > 0) {
+            $item_params = [];
+            foreach ($this->items as $key => $value) {
+                $item_params[$key] = [];
+                foreach ($value as $index => $v) {
+                    $item_params[$key][] = ["id" => $v];
+                }
+            }
+            $this->params["__items"] = $item_params;
+        }
         if ($this->params != null) $data["params"] = $this->params;
-        if ($this->localTimeMs != null) $data["local_time_ms"] = $this->localTimeMs;
-        if ($this->userId != null) $data["user_id"] = $this->userId;
-        if ($this->dateTime != null) $data["datetime"] = $this->dateTime;
+        if ($this->local_time_ms != null) $data["local_time_ms"] = $this->local_time_ms;
+        if ($this->user_id != null) $data["user_id"] = $this->user_id;
+        if ($this->datetime != null) $data["datetime"] = $this->datetime;
+        if ($this->session_id != null) $data["session_id"] = $this->session_id;
         return $data;
     }
 }

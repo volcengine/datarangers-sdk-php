@@ -14,8 +14,9 @@ class Constants
     public static $TIME_ZONE_OFFSET = +8;
     public static $TIME_ZONE_OFFSET_CURRENT = 28800;
     public static $TIME_ZONE_NAME = "Asia/Shanghai";
-    public static $SDK_VERSION = "DataRangers PHP SDK/1.0.0";
+    public static $SDK_VERSION = "DataRangers PHP SDK";
     public static $APP_LOG_URL = "/sdk/log";
     public static $DOMAIN_EXCPETION = "please set domain!";
     public static $INIT_EXCEPTION = "please init sdk before using";
+    public static $DEFAULT_USER="__rangers";
 }

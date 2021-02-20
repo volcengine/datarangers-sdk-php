@@ -11,62 +11,62 @@ use DataRangers\Model\Util\Constants;
 
 class Message implements \JsonSerializable
 {
-    private $appType;
-    private $formatName;
-    private $clientIp;
-    private $traceId;
-    private $appId;
+    private $app_type;
+    private $format_name;
+    private $client_ip;
+    private $trace_id;
+    private $app_id;
     private $header;
-    private $userUniqueId;
-    private $eventV3;
+    private $user_unique_id;
+    private $event_v3;
 
     /**
      * Message constructor.
      */
     public function __construct()
     {
-        $this->formatName = Constants::$SDK_VERSION;
+        $this->format_name = Constants::$SDK_VERSION;
     }
 
 
     /**
-     * @param mixed $appType
+     * @param mixed $app_type
      */
-    public function setAppType($appType)
+    public function setAppType($app_type)
     {
-        $this->appType = $appType;
+        $this->app_type = $app_type;
     }
 
     /**
-     * @param mixed $formatName
+     * @param mixed $format_name
      */
-    public function setFormatName($formatName)
+    public function setFormatName($format_name)
     {
-        $this->formatName = $formatName;
+        $this->format_name = $format_name;
     }
 
     /**
-     * @param mixed $clientIp
+     * @param mixed $client_ip
      */
-    public function setClientIp($clientIp)
+    public function setClientIp($client_ip)
     {
-        $this->clientIp = $clientIp;
+        $this->client_ip = $client_ip;
     }
 
     /**
-     * @param mixed $traceId
+     * @param mixed $trace_id
      */
-    public function setTraceId($traceId)
+    public function setTraceId($trace_id)
     {
-        $this->traceId = $traceId;
+        $this->trace_id = $trace_id;
     }
 
     /**
-     * @param mixed $appId
+     * @param mixed $app_id
      */
-    public function setAppId($appId)
+    public function setAppId($app_id)
     {
-        $this->appId = $appId;
+        $this->app_id = $app_id;
     }
 
     /**
@@ -78,32 +78,32 @@ class Message implements \JsonSerializable
     }
 
     /**
-     * @param mixed $userUniqueId
+     * @param mixed $user_unique_id
      */
-    public function setUserUniqueId($userUniqueId)
+    public function setUserUniqueId($user_unique_id)
     {
-        $this->userUniqueId = $userUniqueId;
+        $this->user_unique_id = $user_unique_id;
     }
 
     /**
-     * @param mixed $eventV3
+     * @param mixed $event_v3
      */
-    public function setEventV3($eventV3)
+    public function setEventV3($event_v3)
     {
-        $this->eventV3 = $eventV3;
+        $this->event_v3 = $event_v3;
     }
 
     public function jsonSerialize()
     {
         $data = [];
-        if ($this->appType != null) $data["app_type"] = $this->appType;
-        if ($this->formatName != null) $data["format_name"] = $this->formatName;
-        if ($this->clientIp != null) $data["client_ip"] = $this->clientIp;
-        if ($this->traceId != null) $data["trace_id"] = $this->traceId;
-        if ($this->appId != null) $data["app_id"] = $this->appId;
+        if ($this->app_type != null) $data["app_type"] = $this->app_type;
+        if ($this->format_name != null) $data["format_name"] = $this->format_name;
+        if ($this->client_ip != null) $data["client_ip"] = $this->client_ip;
+        if ($this->trace_id != null) $data["trace_id"] = $this->trace_id;
+        if ($this->app_id != null) $data["app_id"] = $this->app_id;
         if ($this->header != null) $data["header"] = $this->header;
-        if ($this->userUniqueId != null) $data["user_unique_id"] = $this->userUniqueId;
-        if ($this->eventV3 != null) $data["event_v3"] = $this->eventV3;
+        if ($this->user_unique_id != null) $data["user_unique_id"] = $this->user_unique_id;
+        if ($this->event_v3 != null) $data["event_v3"] = $this->event_v3;
         return $data;
     }
 }
