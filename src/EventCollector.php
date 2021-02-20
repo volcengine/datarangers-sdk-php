@@ -26,41 +26,45 @@ class EventCollector implements Collector
      */
     public function __construct($consumer, $appType)
     {
-        if($consumer==null){
-            if(CollectorConfig::isSave()){
-                $consumer=new FileConsumer();
-            }else{
-                $consumer=new HttpConsumer();
+        if ($consumer == null) {
+            if (CollectorConfig::isSave()) {
+                $consumer = new FileConsumer();
+            } else {
+                $consumer = new HttpConsumer();
             }
         }
         $this->consumer = $consumer;
         $this->appType = $appType;
     }
 
-    public function sendEvent($userUniqueId, $appId, $custom, $eventName, $eventParams)
+    public function sendEvent($userUniqueId, $appId, $custom, $eventName, $eventParams, $items = null)
     {
         $header = new Header();
         $header->setAppId($appId);
         $header->setUserUniqueId($userUniqueId);
         if ($custom != null) $header->setCustom($custom);
-        return $this->sendUserDefineEvent($header,$userUniqueId,$appId, $custom, $eventName, $eventParams);
+        return $this->sendUserDefineEvent($header, $userUniqueId, $appId, $custom, $eventName, $eventParams);
     }
 
-    public function sendUserDefineEvent($header,$userUniqueId, $appId, $custom, $eventName, $eventParams){
+    public function sendUserDefineEvent($header, $userUniqueId, $appId, $custom, $eventName, $eventParams, $items = null)
+    {
         $header->setAppId($appId);
         $header->setUserUniqueId($userUniqueId);
         $events = [];
         if (is_array($eventName) && is_array($eventParams)) {
-            $events = array_map(function ($event_name, $event_params) use ($userUniqueId) {
+            if($items==null)$items=array();
+            $events = array_map(function ($event_name, $event_params, $item) use ($userUniqueId) {
                 $event = new Event($userUniqueId);
                 $event->setEvent($event_name);
                 $event->setParams($event_params);
+                $event->addItems($item);
                 return $event;
-            }, $eventName, $eventParams);
+            }, $eventName, $eventParams,$items);
         } else {
             $event = new Event($userUniqueId);
             $event->setEvent($eventName);
             $event->setParams($eventParams);
+            $event->addItems($items);
             $events[] = $event;
         }
         $message = new Message();

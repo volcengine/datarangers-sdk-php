@@ -15,13 +15,14 @@ interface Collector
      * @param $userUniqueId string uuid
      * @param $appId int appid
      * @param $custom array 自定义属性
-     * @param $eventName object 事件名,可以为array
-     * @param $eventParams object 事件参数,可以为array,与$eventName 长度相同
+     * @param $eventName string 事件名
+     * @param $eventParams array 事件参数
+     * @param null $items array item对象列表
      * 例如 $eventName $eventParams 分别为
      * $eventName = "launch" $eventParams = ["param1"=>"param1","param2"=>"param2"]
      * $eventName = ["launch1","launch2"] $eventParams = [["param1"=>"param1","param2"=>"param2"],["param3"=>"param3","param4"=>"param4"]]
      */
-    public function sendEvent($userUniqueId, $appId, $custom, $eventName, $eventParams);
+    public function sendEvent($userUniqueId, $appId, $custom, $eventName, $eventParams,$items=null);
 
     public function sendUserDefineEvent($header,$userUniqueId, $appId, $custom, $eventName, $eventParams);
 

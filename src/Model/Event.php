@@ -67,10 +67,10 @@ class Event implements \JsonSerializable
         }
     }
 
-    public function addParams($key, $value): void
+    public function addItems($items): void
     {
-        if ($key == "items" && is_array($value)) {
-            foreach ($value as $index => $item_part) {
+        if ($items != null) {
+            foreach ($items as $index => $item_part) {
                 if (is_array($item_part) && array_key_exists("item_id", $item_part) && array_key_exists("item_name", $item_part)) {
                     if (!array_key_exists($item_part["item_name"], $this->items)) {
                         $this->items[$item_part["item_name"]] = [];
@@ -78,14 +78,17 @@ class Event implements \JsonSerializable
                     $this->items[$item_part["item_name"]][] = $item_part["item_id"];
                 }
             }
+        }
+    }
+
+    public function addParams($key, $value): void
+    {
+        if (gettype($value) == "double") {
+            $this->params[$key] = floatval($value);
+        } else if ($key == "session_id") {
+            $this->setSessionId($value);
         } else {
-            if (gettype($value) == "double") {
-                $this->params[$key] = floatval($value);
-            } else if ($key == "session_id") {
-                $this->setSessionId($value);
-            } else {
-                $this->params[$key] = $value;
-            }
+            $this->params[$key] = $value;
         }
     }
 
