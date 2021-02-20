@@ -26,6 +26,13 @@ class EventCollector implements Collector
      */
     public function __construct($consumer, $appType)
     {
+        if($consumer==null){
+            if(CollectorConfig::isSave()){
+                $consumer=new FileConsumer();
+            }else{
+                $consumer=new HttpConsumer();
+            }
+        }
         $this->consumer = $consumer;
         $this->appType = $appType;
     }
