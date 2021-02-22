@@ -43,7 +43,7 @@ class EventCollector implements Collector
         $header->setAppId($appId);
         $header->setUserUniqueId($userUniqueId);
         if ($custom != null) $header->setCustom($custom);
-        return $this->sendUserDefineEvent($header, $userUniqueId, $appId, $custom, $eventName, $eventParams);
+        return $this->sendUserDefineEvent($header, $userUniqueId, $appId, $custom, $eventName, $eventParams,$items);
     }
 
     public function sendUserDefineEvent($header, $userUniqueId, $appId, $custom, $eventName, $eventParams, $items = null)
@@ -56,15 +56,15 @@ class EventCollector implements Collector
             $events = array_map(function ($event_name, $event_params, $item) use ($userUniqueId) {
                 $event = new Event($userUniqueId);
                 $event->setEvent($event_name);
-                $event->setParams($event_params);
                 $event->addItems($item);
+                $event->setParams($event_params);
                 return $event;
             }, $eventName, $eventParams,$items);
         } else {
             $event = new Event($userUniqueId);
             $event->setEvent($eventName);
-            $event->setParams($eventParams);
             $event->addItems($items);
+            $event->setParams($eventParams);
             $events[] = $event;
         }
         $message = new Message();
