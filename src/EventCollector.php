@@ -43,7 +43,7 @@ class EventCollector implements Collector
         $header->setAppId($appId);
         $header->setUserUniqueId($userUniqueId);
         if ($custom != null) $header->setCustom($custom);
-        return $this->sendUserDefineEvent($header, $userUniqueId, $appId, $custom, $eventName, $eventParams,$items);
+        return $this->sendUserDefineEvent($header, $userUniqueId, $appId, $custom, $eventName, $eventParams, $items);
     }
 
     public function sendUserDefineEvent($header, $userUniqueId, $appId, $custom, $eventName, $eventParams, $items = null)
@@ -52,14 +52,14 @@ class EventCollector implements Collector
         $header->setUserUniqueId($userUniqueId);
         $events = [];
         if (is_array($eventName) && is_array($eventParams)) {
-            if($items==null)$items=array();
+            if ($items == null) $items = array();
             $events = array_map(function ($event_name, $event_params, $item) use ($userUniqueId) {
                 $event = new Event($userUniqueId);
                 $event->setEvent($event_name);
                 $event->addItems($item);
                 $event->setParams($event_params);
                 return $event;
-            }, $eventName, $eventParams,$items);
+            }, $eventName, $eventParams, $items);
         } else {
             $event = new Event($userUniqueId);
             $event->setEvent($eventName);
@@ -129,6 +129,7 @@ class EventCollector implements Collector
 
     public function itemSet($appId, $itemName, $items)
     {
+        $items["item_name"] = $itemName;
         $this->profile(Constants::$DEFAULT_USER, $appId, ItemsMethod::SET, $items);
     }
 
