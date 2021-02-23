@@ -70,7 +70,7 @@ interface Collector
     /**
      * @param $appId int app id
      * @param $itemName string item name
-     * @param $items array item example:["item_id"=>"0001","item_name"=>"book","item_price"=>5.0]
+     * @param $items array item example:[["item_id"=>"0001","item_name"=>"book","item_price"=>5.0]]
      * @return mixed
      */
     public function itemSet($appId, $itemName, $items);
