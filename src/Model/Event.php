@@ -161,14 +161,15 @@ class Event implements \JsonSerializable
         $data = [];
         if ($this->event != null) $data["event"] = $this->event;
         if (count($this->items) > 0) {
-            $item_params = [];
+            $this->params["__items"] = [];
             foreach ($this->items as $key => $value) {
+                $item_params = [];
                 $item_params[$key] = [];
                 foreach ($value as $index => $v) {
                     $item_params[$key][] = ["id" => $v];
                 }
+                $this->params["__items"][] = $item_params;
             }
-            $this->params["__items"] = $item_params;
         }
         if ($this->params != null) $data["params"] = $this->params;
         if ($this->local_time_ms != null) $data["local_time_ms"] = $this->local_time_ms;
