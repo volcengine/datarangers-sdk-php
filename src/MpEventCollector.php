@@ -11,8 +11,8 @@ namespace DataRangers;
 
 class MpEventCollector extends EventCollector
 {
-    public function __construct($consumer)
+    public function __construct()
     {
-        parent::__construct($consumer, "mp");
+        parent::__construct(null, "mp");
     }
 }

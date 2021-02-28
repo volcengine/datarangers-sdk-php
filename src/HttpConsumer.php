@@ -17,7 +17,8 @@ class HttpConsumer extends AbstractConsumer
     {
         if (!CollectorConfig::isOk()) throw new RangersSDKException(Constants::$INIT_EXCEPTION);
         if (CollectorConfig::isSend()) {
-            HttpRequests::doRequest("POST", CollectorConfig::getURL(), CollectorConfig::getSendHeader(), null, $message, CollectorConfig::getHttpTimeout());
+            return HttpRequests::doRequest("POST", CollectorConfig::getURL(), CollectorConfig::getSendHeader(), null, $message, CollectorConfig::getHttpTimeout());
         }
+        return "please enable send mode";
     }
 }

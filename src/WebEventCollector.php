@@ -11,8 +11,8 @@ namespace DataRangers;
 
 class WebEventCollector extends EventCollector
 {
-    public function __construct($consumer)
+    public function __construct()
     {
-        parent::__construct($consumer, "web");
+        parent::__construct(null, "web");
     }
 }
