@@ -8,10 +8,13 @@
 
 namespace DataRangers;
 
+use DataRangers\Model\Message\MessageEnv;
 use DataRangers\Model\Util\Constants;
+use DataRangers\OpenapiConfig;
 
 class CollectorConfig
 {
+    public static $env;
     public static $SAVE;
     public static $SEND;
     public static $LOG_FILE_PATH;
@@ -21,6 +24,9 @@ class CollectorConfig
     public static $SEND_HEADER;
     public static $INIT_FLAG;
     public static $HTTP_TIMEOUT;
+    public static $DOMAIN;
+    public static OpenapiConfig $openapi;
+    public static array $appKeys;
 
     public static function init_datarangers_collector($config)
     {
@@ -32,6 +38,7 @@ class CollectorConfig
             self::setSEND(true);
         }
         if (array_key_exists("domain", $config)) {
+            self::setDOMAIN($config["domain"]);
             self::setURL($config["domain"] . Constants::$APP_LOG_URL);
         } else if (self::isSend()) {
             throw new RangersSDKException(Constants::$DOMAIN_EXCPETION);
@@ -42,12 +49,38 @@ class CollectorConfig
         self::setLogMaxMB(self::get($config, "log_max_mb", 100));
         self::setSenderHeader(self::get($config, "headers", []));
         self::setHttpTimeout(self::get($config, "http_timeout", 1000));
+
+        # Saas
+        self::setEnv(self::getKey($config, "env", ""));
+        self::setAppKeys(self::getKey($config, "app_keys", []));
+        self::initOpenapi(self::getKey($config, "openapi", array()));
         self::$INIT_FLAG = true;
     }
 
     public static function isOk()
     {
         return self::$INIT_FLAG;
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getEnv()
+    {
+        return self::$env;
+    }
+
+    /**
+     * @param mixed $env
+     */
+    public static function setEnv($env): void
+    {
+        $saas_env = Constants::$SAAS_DOMAIN_LIST;
+        if ($env === MessageEnv::SAAS || in_array(self::getDOMAIN(), $saas_env)) {
+            self::$env = MessageEnv::SAAS;
+        } else {
+            self::$env = MessageEnv::PRIVATIZATION;
+        }
     }
 
     /**
@@ -71,6 +104,14 @@ class CollectorConfig
         if (in_array($key, $arr)) {
             return !empty($arr[$key]) ? $arr[$key] : $default;
         } else return $default;
+    }
+
+    public static function getKey($arr, $key, $default)
+    {
+        if (array_key_exists($key, $arr)) {
+            return $arr[$key];
+        }
+        return $default;
     }
 
     /**
@@ -186,5 +227,69 @@ class CollectorConfig
     {
         self::$HTTP_TIMEOUT = $HTTP_TIME_OUT;
     }
+
+    /**
+     * @return OpenapiConfig
+     */
+    public static function getOpenapi(): OpenapiConfig
+    {
+        return self::$openapi;
+    }
+
+    /**
+     * @param OpenapiConfig $openapi
+     */
+    public static function initOpenapi(array $openapi): void
+    {
+        if (!$openapi) {
+            return;
+        }
+        $openapi_config = new OpenapiConfig();
+        $openapi_config->sedDomain($openapi["domain"]);
+        $openapi_config->setAk($openapi["ak"]);
+        $openapi_config->setSk($openapi["sk"]);
+        self::setOpenapi($openapi_config);
+    }
+
+    /**
+     * @param OpenapiConfig $openapi
+     */
+    public static function setOpenapi(OpenapiConfig $openapi): void
+    {
+        self::$openapi = $openapi;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAppKeys(): array
+    {
+        return self::$appKeys;
+    }
+
+    /**
+     * @param array $appKeys
+     */
+    public static function setAppKeys(array $appKeys): void
+    {
+        self::$appKeys = $appKeys;
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getDOMAIN()
+    {
+        return self::$DOMAIN;
+    }
+
+    /**
+     * @param mixed $DOMAIN
+     */
+    public static function setDOMAIN($DOMAIN): void
+    {
+        self::$DOMAIN = $DOMAIN;
+    }
+
 
 }

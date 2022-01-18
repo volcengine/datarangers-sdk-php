@@ -8,6 +8,8 @@
 
 namespace DataRangers\Model;
 
+use DataRangers\CollectorConfig;
+use DataRangers\Model\Message\MessageEnv;
 use DataRangers\Model\Util\Constants;
 
 class Header implements \JsonSerializable
@@ -108,6 +110,7 @@ class Header implements \JsonSerializable
     public function setAppId($app_id): void
     {
         $this->app_id = $app_id;
+        $this->aid = $app_id;
     }
 
     /**
@@ -705,7 +708,7 @@ class Header implements \JsonSerializable
     public function jsonSerialize()
     {
         $data = [];
-        if ($this->app_id != null) {
+        if ($this->app_id != null && CollectorConfig::$env != MessageEnv::SAAS) {
             $data["app_id"] = $this->app_id;
             $data["aid"] = $this->app_id;
         }

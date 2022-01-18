@@ -6,19 +6,12 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-namespace DataRangers;
+namespace DataRangers\Model;
 
-use DataRangers\Model\Util\Constants;
-use DataRangers\Sender\MessageSenderFactory;
 
-class HttpConsumer extends AbstractConsumer
+class ItemMethod
 {
-    public function send($message)
-    {
-        if (!CollectorConfig::isOk()) throw new RangersSDKException(Constants::$INIT_EXCEPTION);
-        if (CollectorConfig::isSend()) {
-            return MessageSenderFactory::getMessageSender($message)->send($message);
-        }
-        return "please enable send mode";
-    }
+    const SET = "__item_set";
+    const UN_SET = "__item_unset";
+    const DELETE = "__item_delete";
 }
