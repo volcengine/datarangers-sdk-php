@@ -6,10 +6,11 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-namespace DataRangers\Model;
+namespace DataRangers\Model\Message;
+
 use DataRangers\Model\Util\Constants;
 
-class Message implements \JsonSerializable
+class AppMessage implements \JsonSerializable
 {
     private $appType;
     private $formatName;
@@ -93,6 +94,70 @@ class Message implements \JsonSerializable
         $this->eventV3 = $eventV3;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getAppType()
+    {
+        return $this->appType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormatName(): string
+    {
+        return $this->formatName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getClientIp()
+    {
+        return $this->clientIp;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTraceId()
+    {
+        return $this->traceId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAppId()
+    {
+        return $this->appId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHeader()
+    {
+        return $this->header;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserUniqueId()
+    {
+        return $this->userUniqueId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEventV3()
+    {
+        return $this->eventV3;
+    }
+
     public function jsonSerialize()
     {
         $data = [];
@@ -106,4 +171,5 @@ class Message implements \JsonSerializable
         if ($this->eventV3 != null) $data["event_v3"] = $this->eventV3;
         return $data;
     }
+
 }

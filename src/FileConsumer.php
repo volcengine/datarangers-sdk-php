@@ -9,6 +9,9 @@
 namespace DataRangers;
 
 use DataRangers\CollectorConfig;
+use DataRangers\Model\Message\Message;
+use DataRangers\Model\Message\MessageEnv;
+use http\Exception\InvalidArgumentException;
 
 class FileConsumer extends AbstractConsumer
 {
@@ -89,8 +92,14 @@ class FileConsumer extends AbstractConsumer
 
     public function send($msg)
     {
+        if (CollectorConfig::$env === MessageEnv::SAAS) {
+            throw new \InvalidArgumentException("Saas not support FileConsumer");
+        }
         if ($msg != null) {
-            $state = fwrite($this->output, json_encode($msg) . "\n");
+            /** @var Message $message */
+            $message = $msg;
+            $appMessage = $message->getAppMessage();
+            $state = fwrite($this->output, json_encode($appMessage) . "\n");
             $this->count++;
             if ($this->count > 10000) {
                 $this->changeOutputStream();

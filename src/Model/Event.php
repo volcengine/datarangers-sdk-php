@@ -17,6 +17,8 @@ class Event implements \JsonSerializable
     private $localTimeMs;
     private $dateTime;
     private $userId;
+    private $abSdkVersion;
+    private $items;
 
     /**
      * Event constructor.
@@ -76,6 +78,86 @@ class Event implements \JsonSerializable
         $this->userId = $userId;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSessionId()
+    {
+        return $this->sessionId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLocalTimeMs(): int
+    {
+        return $this->localTimeMs;
+    }
+
+    /**
+     * @return false|string
+     */
+    public function getDateTime()
+    {
+        return $this->dateTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAbSdkVersion()
+    {
+        return $this->abSdkVersion;
+    }
+
+    /**
+     * @param mixed $abSdkVersion
+     */
+    public function setAbSdkVersion($abSdkVersion): void
+    {
+        $this->abSdkVersion = $abSdkVersion;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param mixed items
+     */
+    public function setItems($items): void
+    {
+        $this->items = $items;
+    }
+
     public function jsonSerialize()
     {
         $data = [];
@@ -84,6 +166,10 @@ class Event implements \JsonSerializable
         if ($this->localTimeMs != null) $data["local_time_ms"] = $this->localTimeMs;
         if ($this->userId != null) $data["user_id"] = $this->userId;
         if ($this->dateTime != null) $data["datetime"] = $this->dateTime;
+        if ($this->abSdkVersion != null) $data["ab_sdk_version"] = $this->abSdkVersion;
+        if ($this->items != null) {
+            $data["params"]['__items'] = array_values($this->items);
+        }
         return $data;
     }
 }

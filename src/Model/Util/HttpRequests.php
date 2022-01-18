@@ -5,7 +5,9 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
+
 namespace DataRangers\Model\Util;
+
 class HttpRequests
 {
     public static function doRequest($method, $url, $headers, $params, $body, $timeout = 1000)
@@ -16,13 +18,19 @@ class HttpRequests
         foreach ($headers as $key => $value) {
             $header[] = $key . ":" . $value;
         }
-        if ($method != "GET") $header[] = 'Content-Type: application/json';
+        if ($method != "GET") {
+            $header[] = 'Content-Type: application/json';
+        }
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, $timeout);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        $sendBody=json_encode($body);
+        if (is_string($body)) {
+            $sendBody = $body;
+        } else {
+            $sendBody = json_encode($body);
+        }
         switch ($method) {
             case "GET":
                 curl_setopt($ch, CURLOPT_HTTPGET, true);
@@ -37,8 +45,25 @@ class HttpRequests
                 break;
         }
         $content = curl_exec($ch);
-        return $content;
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if ($content === false || $httpCode != 200) {
+            $result = $content;
+            if ($result === false) {
+                $result = "fail";
+            }
+            throw new \RuntimeException(sprintf('send fail, result: %s, error: %s', $result, curl_error($ch)), 0);
+        }
         curl_close($ch);
+        $content_json = json_decode($content);
+        if (property_exists($content_json, "code")) {
+            $code = get_object_vars($content_json)["code"];
+            // 取余数，保证是 400
+            $code = $code % 1000;
+            if ($code >= 400) {
+                throw new \RuntimeException(sprintf('send fail, result: %s, error: %s', $content, curl_error($ch)), 0);
+            }
+        }
+        return $content;
     }
 
     public static function post($url, $headers, $params, $body, $timeout = 120)

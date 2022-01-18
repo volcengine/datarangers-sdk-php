@@ -12,5 +12,12 @@ CollectorConfig::init_datarangers_collector([
     "log_max_bytes" => 1024 * 10
 ]);
 $rc = new AppEventCollector(new FileConsumer());
-$rc->sendEvent("uuid16981", 10000002, null, ["__profile_set", "php_event"],
+$rc->sendEvent("uuid16981", 10000001, null, ["__profile_set", "php_event"],
     [["php_name" => "php", "php_version" => "5.6"], ["php_name" => "php", "php_version" => "5.6"]]);
+
+$rc->itemSet(10000001, "book", "book1", ["author" => "吴承恩", "name" => "西游记", "price" => 59.90, "category" => 1]);
+$rc->itemSet(10000001, "book", "book2", ["author" => "Guanzhong Luo", "name" => "SanGuoYanYi", "price" => 69.90, "category" => 1]);
+
+
+$rc->sendEvent("uuid16981", 10000001, null, ["php_event_with_item"],
+    [["php_name" => "php", "php_version" => "5.6"]],[["book"=>[["id"=>"book1"], ["id"=>"book2"]]]]);

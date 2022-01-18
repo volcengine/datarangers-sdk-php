@@ -17,11 +17,16 @@ interface Collector
      * @param $custom array 自定义属性
      * @param $eventName object 事件名,可以为array
      * @param $eventParams object 事件参数,可以为array,与$eventName 长度相同
-     * 例如 $eventName $eventParams 分别为
+     * @param $items object item参数,可以为array,与$eventName 长度相同
+
+     * 例如 $eventName $eventParams, $items 分别为
      * $eventName = "launch" $eventParams = ["param1"=>"param1","param2"=>"param2"]
-     * $eventName = ["launch1","launch2"] $eventParams = [["param1"=>"param1","param2"=>"param2"],["param3"=>"param3","param4"=>"param4"]]
+     *
+     * $eventName = ["launch1","launch2"]
+     * $eventParams = [["param1"=>"param1","param2"=>"param2"],["param3"=>"param3","param4"=>"param4"]]
+     * $item = [["book" => [["id" => "book1"], ["id" => "book2"]]]]
      */
-    public function sendEvent($userUniqueId, $appId, $custom, $eventName, $eventParams);
+    public function sendEvent($userUniqueId, $appId, $custom, $eventName, $eventParams, $items=null);
 
     /**
      * set user profile
@@ -63,4 +68,34 @@ interface Collector
      * @return mixed
      */
     public function profileAppend($userUniqueId, $appId, $eventParams);
+
+    /**
+     * 上报item属性
+     * @param $appId
+     * @param $itemName
+     * @param $itemId
+     * @param $itemParams
+     * @return mixed
+     */
+    public function itemSet($appId, $itemName, $itemId, $itemParams);
+
+    /**
+     * unset item属性
+     * @param $appId
+     * @param $itemName
+     * @param $itemId
+     * @param $itemParams
+     * @return mixed
+     */
+    public function itemUnset($appId, $itemName, $itemId, $itemParams);
+
+    /**
+     * delete item 属性
+     * @param $appId
+     * @param $itemName
+     * @param $itemId
+     * @param $itemParams
+     * @return mixed
+     */
+    public function itemDelete($appId, $itemName, $itemId, $itemParams);
 }
