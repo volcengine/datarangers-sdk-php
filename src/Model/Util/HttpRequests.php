@@ -51,18 +51,24 @@ class HttpRequests
             if ($result === false) {
                 $result = "fail";
             }
-            throw new \RuntimeException(sprintf('send fail, result: %s, error: %s', $result, curl_error($ch)), 0);
+            $error = curl_error($ch);
+            curl_close($ch);
+            throw new \RuntimeException(sprintf('send fail, result: %s, error: %s', $result, $error), 0);
         }
-        curl_close($ch);
         $content_json = json_decode($content);
         if (property_exists($content_json, "code")) {
             $code = get_object_vars($content_json)["code"];
-            // 取余数，保证是 400
-            $code = $code % 1000;
+            // 可能是2000， 4000
+            if ($code >= 1000) {
+                $code = $code / 10;
+            }
             if ($code >= 400) {
-                throw new \RuntimeException(sprintf('send fail, result: %s, error: %s', $content, curl_error($ch)), 0);
+                $error = curl_error($ch);
+                curl_close($ch);
+                throw new \RuntimeException(sprintf('send fail, result: %s, error: %s', $content, $error), 0);
             }
         }
+        curl_close($ch);
         return $content;
     }
 
