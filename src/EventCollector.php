@@ -9,9 +9,13 @@
 namespace DataRangers;
 
 use DataRangers\Model\Event;
+use DataRangers\Model\EventWithItem;
 use DataRangers\Model\Header;
+use DataRangers\Model\ItemMethod;
 use DataRangers\Model\ItemsMethod;
-use DataRangers\Model\Message;
+use DataRangers\Model\Message\AppMessage;
+use DataRangers\Model\Message\Message;
+use DataRangers\Model\Message\MessageType;
 use DataRangers\Model\ProfileMethod;
 use DataRangers\Model\Util\Constants;
 
@@ -37,7 +41,7 @@ class EventCollector implements Collector
         $this->appType = $appType;
     }
 
-    public function sendEvent($userUniqueId, $appId, $custom, $eventName, $eventParams, $items = null)
+    public function sendEvent($userUniqueId, $appId, $custom, $eventName, $eventParams, $items = null, $abSdkVersion = null)
     {
         $header = new Header();
         $header->setAppId($appId);
@@ -46,47 +50,47 @@ class EventCollector implements Collector
         return $this->sendUserDefineEvent($header, $userUniqueId, $appId, $custom, $eventName, $eventParams, $items);
     }
 
-    public function sendUserDefineEvent($header, $userUniqueId, $appId, $custom, $eventName, $eventParams, $items = null)
+    public function sendUserDefineEvent($header, $userUniqueId, $appId, $custom, $eventName, $eventParams, $items = null, $abSdkVersion = null)
     {
         $header->setAppId($appId);
         $header->setUserUniqueId($userUniqueId);
         $events = [];
         if (is_array($eventName) && is_array($eventParams)) {
-            if ($items == null) $items = array();
-            $events = array_map(function ($event_name, $event_params, $item) use ($userUniqueId) {
+            if (is_null($items)) {
+                $items = [[[]]];
+            }
+            if (is_null($abSdkVersion)) {
+                $abSdkVersion = [];
+            }
+            $events = array_map(function ($event_name, $event_params, $items, $abSdkVersion) use ($userUniqueId) {
                 $event = new Event($userUniqueId);
                 $event->setEvent($event_name);
-                $event->addItems($item);
                 $event->setParams($event_params);
+                $event->setAbSdkVersion($abSdkVersion);
+                $this->setItemsWithEvent($items, $event);
                 return $event;
-            }, $eventName, $eventParams, $items);
+            }, $eventName, $eventParams, $items, $abSdkVersion);
         } else {
             $event = new Event($userUniqueId);
             $event->setEvent($eventName);
-            $event->addItems($items);
             $event->setParams($eventParams);
+            $event->setAbSdkVersion($abSdkVersion);
+            $this->setItemsWithEvent($items, $event);
             $events[] = $event;
         }
         $message = new Message();
-        $message->setUserUniqueId($userUniqueId);
-        $message->setEventV3($events);
-        $message->setAppId($appId);
-        $message->setAppType($this->appType);
-        $message->setHeader($header);
-        return $this->consumer->send($message);
-    }
+        $message->setMessageType(MessageType::EVENT);
+        $message->setMessageEnv(CollectorConfig::getEnv());
 
-    public function profiles($userUniqueId, $appId, $events)
-    {
-        $header = new Header();
-        $header->setAppId($appId);
-        $header->setUserUniqueId($userUniqueId);
-        $message = new Message();
-        $message->setUserUniqueId($userUniqueId);
-        $message->setEventV3($events);
-        $message->setAppId($appId);
-        $message->setAppType($this->appType);
-        $message->setHeader($header);
+        $appMessage = new AppMessage();
+        $message->setAppMessage($appMessage);
+
+        $appMessage->setUserUniqueId($userUniqueId);
+        $appMessage->setEventV3($events);
+        $appMessage->setAppId($appId);
+        $appMessage->setAppType($this->appType);
+        $appMessage->setHeader($header);
+
         $this->consumer->send($message);
     }
 
@@ -100,18 +104,26 @@ class EventCollector implements Collector
         $event->setEvent($eventName);
         $event->setParams($eventParams);
         $events[] = $event;
+
         $message = new Message();
-        $message->setUserUniqueId($userUniqueId);
-        $message->setEventV3($events);
-        $message->setAppId($appId);
-        $message->setAppType($this->appType);
-        $message->setHeader($header);
+        $message->setMessageType(MessageType::PROFILE);
+        $message->setMessageEnv(CollectorConfig::getEnv());
+
+        $appMessage = new AppMessage();
+        $message->setAppMessage($appMessage);
+
+        $appMessage->setUserUniqueId($userUniqueId);
+        $appMessage->setEventV3($events);
+        $appMessage->setAppId($appId);
+        $appMessage->setAppType($this->appType);
+        $appMessage->setHeader($header);
+
         $this->consumer->send($message);
     }
 
-    public function profileSet($userUniqueId, $appId, $eventParams)
+    public function profileSet($userUniqueId, $appId, $profileParams)
     {
-        $this->profile($userUniqueId, $appId, ProfileMethod::SET, $eventParams);
+        $this->profile($userUniqueId, $appId, ProfileMethod::SET, $profileParams);
     }
 
 
@@ -140,32 +152,119 @@ class EventCollector implements Collector
         $this->profile($userUniqueId, $appId, ProfileMethod::APPEND, $eventParams);
     }
 
-
     public function itemSet($appId, $itemName, $items)
     {
         $events = [];
         foreach ($items as $item) {
             $item["item_name"] = $itemName;
-            $event = new Event(Constants::$DEFAULT_USER);
+            if (!array_key_exists("item_id", $item)) {
+                throw new \InvalidArgumentException("Must have a item_id param");
+            }
+            $event = new Event(Constants::$DEFAULT_ITEM_USER);
             $event->setEvent(ItemsMethod::SET);
             $event->setParams($item);
             $events[] = $event;
         }
-
-        $this->profiles(Constants::$DEFAULT_USER, $appId, $events);
+        $this->item($appId, $events);
     }
 
-    public function itemUnset($appId, $itemName, $itemId, $items)
+    public function itemIdSet($appId, $itemName, $itemId, $itemParams)
     {
-        $item_params = ["item_id" => $itemId, "item_name" => $itemName];
-        foreach ($items as $item) {
-            $item_params[$item] = "php";
+        $this->item($appId, $this->itemEvent($itemName, $itemId, ItemMethod::SET, $itemParams));
+    }
+
+    public function itemUnset($appId, $itemName, $itemId, $params)
+    {
+        $itemParams = ["item_id" => $itemId, "item_name" => $itemName];
+        foreach ($params as $param) {
+            $itemParams[$param] = "php";
         }
-        $this->profile(Constants::$DEFAULT_USER, $appId, ItemsMethod::UNSET, $item_params);
+        $this->item($appId, $this->itemEvent($itemName, $itemId, ItemMethod::UN_SET, $itemParams));
     }
 
-    public function itemDelete($appId, $itemName, $items)
+    public function itemDelete($appId, $itemName, $itemId, $itemParams)
     {
-        $this->profile(Constants::$DEFAULT_USER, $appId, ItemsMethod::DELETE, $items);
+        $this->item($appId, $this->itemEvent($itemName, $itemId, ItemMethod::DELETE, $itemParams));
     }
+
+    private function itemEvent($itemName, $itemId, $eventName, $itemParams)
+    {
+        $userUniqueId = Constants::$DEFAULT_ITEM_USER;
+        $itemParams['item_id'] = $itemId;
+        $itemParams['item_name'] = $itemName;
+
+        $events = [];
+        $event = new Event($userUniqueId);
+        $event->setEvent($eventName);
+        $event->setParams($itemParams);
+        $events[] = $event;
+        return $events;
+    }
+
+    private function item($appId, $events)
+    {
+        $userUniqueId = Constants::$DEFAULT_ITEM_USER;
+
+        $header = new Header();
+        $header->setAppId($appId);
+        $header->setUserUniqueId(Constants::$DEFAULT_ITEM_USER);
+
+        $message = new Message();
+        $message->setMessageType(MessageType::ITEM);
+        $message->setMessageEnv(CollectorConfig::getEnv());
+
+        $appMessage = new AppMessage();
+        $message->setAppMessage($appMessage);
+
+        $appMessage->setUserUniqueId($userUniqueId);
+        $appMessage->setEventV3($events);
+        $appMessage->setAppId($appId);
+        $appMessage->setAppType($this->appType);
+        $appMessage->setHeader($header);
+
+        $this->consumer->send($message);
+    }
+
+    /**
+     * @param array $items
+     * @return array
+     */
+    private function getEventWithItems(array $items): array
+    {
+        $item_map = array();
+        foreach ($items as $row) {
+            if (empty($row)) {
+                continue;
+            }
+            if (!array_key_exists("item_name", $row)) {
+                throw new \InvalidArgumentException("event with item must have item_name");
+            }
+            if (!array_key_exists("item_id", $row)) {
+                throw new \InvalidArgumentException("event with item must have item_id");
+            }
+            $item_map[$row['item_name']][] = array("id" => $row['item_id']);
+        }
+        $eventWithItems = [];
+        foreach ($item_map as $key => $value) {
+            $eventWithItem = new EventWithItem();
+            $eventWithItem->setItemName($key);
+            $eventWithItem->setItemIds($value);
+            $eventWithItems [] = $eventWithItem;
+        }
+        return $eventWithItems;
+    }
+
+    /**
+     * @param $items
+     * @param Event $event
+     * @return void
+     */
+    public function setItemsWithEvent($items, Event $event): void
+    {
+        if (is_array($items) && (!empty($items))) {
+            $eventWithItems = $this->getEventWithItems($items);
+            $event->setItems($eventWithItems);
+        }
+    }
+
 }

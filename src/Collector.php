@@ -15,14 +15,22 @@ interface Collector
      * @param $userUniqueId string uuid
      * @param $appId int appid
      * @param $custom array 自定义属性
-     * @param $eventName string 事件名
-     * @param $eventParams array 事件参数
-     * @param null $items array item对象列表
-     * 例如 $eventName $eventParams 分别为
+     * @param $eventName object 事件名,可以为array
+     * @param $eventParams object 事件参数,可以为array,与$eventName 长度相同
+     * @param $items object item参数,可以为array,与$eventName 长度相同
+
+     * 例如 $eventName $eventParams, $items 分别为
      * $eventName = "launch" $eventParams = ["param1"=>"param1","param2"=>"param2"]
-     * $eventName = ["launch1","launch2"] $eventParams = [["param1"=>"param1","param2"=>"param2"],["param3"=>"param3","param4"=>"param4"]]
+     *
+     * $eventName = ["launch1","launch2"]
+     * $eventParams = [["param1"=>"param1","param2"=>"param2"],["param3"=>"param3","param4"=>"param4"]]
+     * $items = [[
+            ["item_id" => "0001", "item_name" => "book"],
+            ["item_id" => "0002", "item_name" => "book"],
+            ["item_id" => "0003", "item_name" => "phone"]
+        ]];
      */
-    public function sendEvent($userUniqueId, $appId, $custom, $eventName, $eventParams,$items=null);
+    public function sendEvent($userUniqueId, $appId, $custom, $eventName, $eventParams, $items=null, $abSdkVersion=null);
 
     public function sendUserDefineEvent($header,$userUniqueId, $appId, $custom, $eventName, $eventParams);
 
@@ -76,11 +84,32 @@ interface Collector
     public function itemSet($appId, $itemName, $items);
 
     /**
-     * @param $appId int
-     * @param $itemName string
-     * @param $itemId string
-     * @param $items array example: ["param1","param2","param3"]
+     * 上报item属性
+     * @param $appId
+     * @param $itemName
+     * @param $itemId
+     * @param $itemParams
      * @return mixed
      */
-    public function itemUnset($appId, $itemName, $itemId, $items);
+    public function itemIdSet($appId, $itemName, $itemId, $itemParams);
+
+    /**
+     * unset item属性
+     * @param $appId
+     * @param $itemName
+     * @param $itemId
+     * @param $params
+     * @return mixed
+     */
+    public function itemUnset($appId, $itemName, $itemId, $params);
+
+    /**
+     * delete item 属性
+     * @param $appId
+     * @param $itemName
+     * @param $itemId
+     * @param $itemParams
+     * @return mixed
+     */
+    public function itemDelete($appId, $itemName, $itemId, $itemParams);
 }

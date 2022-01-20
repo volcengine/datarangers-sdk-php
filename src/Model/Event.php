@@ -13,22 +13,69 @@ class Event implements \JsonSerializable
 {
     private $event;
     private $params;
-    private $session_id;
-    private $local_time_ms;
-    private $datetime;
-    private $user_id;
+    private $sessionId;
+    private $localTimeMs;
+    private $dateTime;
+    private $userId;
+    private $abSdkVersion;
     private $items;
 
     /**
      * Event constructor.
      */
-    public function __construct($user_id)
+    public function __construct($userId)
     {
-        $this->local_time_ms = (int)(microtime(true) * 1000);
-        $this->datetime = date("Y-m-d H:i:s", time());
-        $this->user_id = $user_id;
-        $this->items = [];
-        $this->params = [];
+        $this->localTimeMs = (int)(microtime(true) * 1000);
+        $this->dateTime = date("Y-m-d H:i:s", time());
+        $this->userId = $userId;
+    }
+
+    /**
+     * @param mixed $event
+     */
+    public function setEvent($event)
+    {
+        $this->event = $event;
+    }
+
+    /**
+     * @param mixed $params
+     */
+    public function setParams($params)
+    {
+        $this->params = $params;
+    }
+
+    /**
+     * @param mixed $sessionId
+     */
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
+    }
+
+    /**
+     * @param mixed $localTimeMs
+     */
+    public function setLocalTimeMs($localTimeMs)
+    {
+        $this->localTimeMs = $localTimeMs;
+    }
+
+    /**
+     * @param mixed $dateTime
+     */
+    public function setDateTime($dateTime)
+    {
+        $this->dateTime = $dateTime;
+    }
+
+    /**
+     * @param mixed $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
     }
 
     /**
@@ -40,14 +87,6 @@ class Event implements \JsonSerializable
     }
 
     /**
-     * @param mixed $event
-     */
-    public function setEvent($event): void
-    {
-        $this->event = $event;
-    }
-
-    /**
      * @return mixed
      */
     public function getParams()
@@ -56,56 +95,11 @@ class Event implements \JsonSerializable
     }
 
     /**
-     * @param mixed $params
-     */
-    public function setParams($params): void
-    {
-        if (is_array($params)) {
-            foreach ($params as $key => $value) {
-                $this->addParams($key, $value);
-            }
-        }
-    }
-
-    public function addItems($items): void
-    {
-        if ($items != null) {
-            foreach ($items as $index => $item_part) {
-                if (is_array($item_part) && array_key_exists("item_id", $item_part) && array_key_exists("item_name", $item_part)) {
-                    if (!array_key_exists($item_part["item_name"], $this->items)) {
-                        $this->items[$item_part["item_name"]] = [];
-                    }
-                    $this->items[$item_part["item_name"]][] = $item_part["item_id"];
-                }
-            }
-        }
-    }
-
-    public function addParams($key, $value): void
-    {
-        if (gettype($value) == "double") {
-            $this->params[$key] = floatval($value);
-        } else if ($key == "session_id") {
-            $this->setSessionId($value);
-        } else {
-            $this->params[$key] = $value;
-        }
-    }
-
-    /**
      * @return mixed
      */
     public function getSessionId()
     {
-        return $this->session_id;
-    }
-
-    /**
-     * @param mixed $session_id
-     */
-    public function setSessionId($session_id): void
-    {
-        $this->session_id = $session_id;
+        return $this->sessionId;
     }
 
     /**
@@ -113,31 +107,15 @@ class Event implements \JsonSerializable
      */
     public function getLocalTimeMs(): int
     {
-        return $this->local_time_ms;
-    }
-
-    /**
-     * @param int $local_time_ms
-     */
-    public function setLocalTimeMs(int $local_time_ms): void
-    {
-        $this->local_time_ms = $local_time_ms;
+        return $this->localTimeMs;
     }
 
     /**
      * @return false|string
      */
-    public function getDatetime()
+    public function getDateTime()
     {
-        return $this->datetime;
-    }
-
-    /**
-     * @param false|string $datetime
-     */
-    public function setDatetime($datetime): void
-    {
-        $this->datetime = $datetime;
+        return $this->dateTime;
     }
 
     /**
@@ -145,37 +123,53 @@ class Event implements \JsonSerializable
      */
     public function getUserId()
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
     /**
-     * @param mixed $user_id
+     * @return mixed
      */
-    public function setUserId($user_id): void
+    public function getAbSdkVersion()
     {
-        $this->user_id = $user_id;
+        return $this->abSdkVersion;
+    }
+
+    /**
+     * @param mixed $abSdkVersion
+     */
+    public function setAbSdkVersion($abSdkVersion): void
+    {
+        $this->abSdkVersion = $abSdkVersion;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param mixed items
+     */
+    public function setItems($items): void
+    {
+        $this->items = $items;
     }
 
     public function jsonSerialize()
     {
         $data = [];
         if ($this->event != null) $data["event"] = $this->event;
-        if (count($this->items) > 0) {
-            $this->params["__items"] = [];
-            foreach ($this->items as $key => $value) {
-                $item_params = [];
-                $item_params[$key] = [];
-                foreach ($value as $index => $v) {
-                    $item_params[$key][] = ["id" => $v];
-                }
-                $this->params["__items"][] = $item_params;
-            }
-        }
         if ($this->params != null) $data["params"] = $this->params;
-        if ($this->local_time_ms != null) $data["local_time_ms"] = $this->local_time_ms;
-        if ($this->user_id != null) $data["user_id"] = $this->user_id;
-        if ($this->datetime != null) $data["datetime"] = $this->datetime;
-        if ($this->session_id != null) $data["session_id"] = $this->session_id;
+        if ($this->localTimeMs != null) $data["local_time_ms"] = $this->localTimeMs;
+        if ($this->userId != null) $data["user_id"] = $this->userId;
+        if ($this->dateTime != null) $data["datetime"] = $this->dateTime;
+        if ($this->abSdkVersion != null) $data["ab_sdk_version"] = $this->abSdkVersion;
+        if ($this->items != null) {
+            $data["params"]['__items'] = array_values($this->items);
+        }
         return $data;
     }
 }

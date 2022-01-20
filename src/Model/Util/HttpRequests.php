@@ -7,6 +7,7 @@
  */
 
 namespace DataRangers\Model\Util;
+
 class HttpRequests
 {
     public static function doRequest($method, $url, $headers, $params, $body, $timeout = 1000)
@@ -17,13 +18,19 @@ class HttpRequests
         foreach ($headers as $key => $value) {
             $header[] = $key . ":" . $value;
         }
-        if ($method != "GET") $header[] = 'Content-Type: application/json';
+        if ($method != "GET") {
+            $header[] = 'Content-Type: application/json';
+        }
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, $timeout);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        $sendBody = json_encode($body, JSON_PRESERVE_ZERO_FRACTION);
+        if (is_string($body)) {
+            $sendBody = $body;
+        } else {
+            $sendBody = json_encode($body, JSON_PRESERVE_ZERO_FRACTION);
+        }
         switch ($method) {
             case "GET":
                 curl_setopt($ch, CURLOPT_HTTPGET, true);
@@ -38,8 +45,31 @@ class HttpRequests
                 break;
         }
         $content = curl_exec($ch);
-        return $content;
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if ($content === false || $httpCode != 200) {
+            $result = $content;
+            if ($result === false) {
+                $result = "fail";
+            }
+            $error = curl_error($ch);
+            curl_close($ch);
+            throw new \RuntimeException(sprintf('send fail, result: %s, error: %s', $result, $error), 0);
+        }
+        $content_json = json_decode($content);
+        if (property_exists($content_json, "code")) {
+            $code = get_object_vars($content_json)["code"];
+            // 可能是2000， 4000
+            if ($code >= 1000) {
+                $code = $code / 10;
+            }
+            if ($code >= 400) {
+                $error = curl_error($ch);
+                curl_close($ch);
+                throw new \RuntimeException(sprintf('send fail, result: %s, error: %s', $content, $error), 0);
+            }
+        }
         curl_close($ch);
+        return $content;
     }
 
     public static function post($url, $headers, $params, $body, $timeout = 120)
@@ -65,18 +95,6 @@ class HttpRequests
             $param = $param . $key . "=" . urlencode($value) . "&";
         }
         return substr($param, 0, strlen($param) - 1);
-    }
-
-    private static function formatHeaders($headers, $contentType = false)
-    {
-        $header = "";
-        foreach ($headers as $key => $value) {
-            $header = $header . $key . ": " . $value . "\r\n";
-        }
-        if ($contentType) {
-            $header = $header . "Content-Type : application/json\r\n";
-        }
-        return $header;
     }
 
 }
