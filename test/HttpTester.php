@@ -18,7 +18,7 @@ CollectorConfig::init_datarangers_collector([
 $rc = new AppEventCollector();
 
 $item = [
-    ["item_id" => "0001", "item_name" => "book", "price" => 5.01, "version" => [1, 2, 3]],
+    ["item_id" => "0001", "item_name" => "book", "price" => 5.01, "versions" => [1, 2, 3]],
     ["item_id" => "0002", "item_name" => "book", "price" => 5.02, "author" => "JK Rowling"]
 ];
 
