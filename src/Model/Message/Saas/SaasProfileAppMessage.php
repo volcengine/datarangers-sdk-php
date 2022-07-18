@@ -12,7 +12,7 @@ class SaasProfileAppMessage implements \JsonSerializable
         ProfileMethod::SET => "SET",
         ProfileMethod::SET_ONCE => "SET_ONCE",
         ProfileMethod::APPEND => "APPEND",
-        ProfileMethod::INCREMENT => "INCREMENT",
+        ProfileMethod::INCREMENT => "INCREASE",
         ProfileMethod::UN_SET => "UNSET"
     );
 
