@@ -167,7 +167,7 @@ class AppMessage implements \JsonSerializable
         if ($this->traceId != null) $data["trace_id"] = $this->traceId;
         if ($this->appId != null) $data["app_id"] = $this->appId;
         if ($this->header != null) $data["header"] = $this->header;
-        if ($this->userUniqueId != null) $data["user_unique_id"] = $this->userUniqueId;
+        if ($this->userUniqueId !== null) $data["user_unique_id"] = $this->userUniqueId;
         if ($this->eventV3 != null) $data["event_v3"] = $this->eventV3;
         return $data;
     }

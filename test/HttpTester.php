@@ -47,6 +47,11 @@ $header->setAppId(10000000);
 $header->setUserUniqueId("test-uuid2");
 $header->setClientIp("49.7.44.244");
 $header->setOs("android");
+$header->setDeviceId(7786627007290925058);
+
+$rc->sendUserDefineEvent($header, "", 10000000, null, "php_event_with_anonymous",
+    ["php_name" => "php", "php_version" => "5.6", "float_param" => floatval(5), "session_id" => "1234567890"]);
+
 
 $rc->sendUserDefineEvent($header, "test-uuid2", 10000000, null, "php_event_with_items",
     ["php_name" => "php", "php_version" => "5.6", "float_param" => floatval(5), "session_id" => "1234567890"], $items);
@@ -71,3 +76,5 @@ $rc->sendEvent("test-uuid1", 10000001, null, ["php_event_with_item"],
     [["php_name" => "php", "php_version" => "5.6"]], [
         [["item_name" => "book", "item_id" => "0001"], ["item_name" => "book", "item_id" => "0002"]]
     ]);
+
+sleep(10);
