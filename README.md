@@ -32,7 +32,8 @@ datarangers-sdk-php是 [DataRangers](https://datarangers.com.cn/) 的用户行�
             "headers" => [
                 "Host" => "host",
                 "Content-Type" => "application/json"
-            ]
+            ],
+            "http_timeout"=> 10000
         ]);
    
     # saas 云上环境
@@ -49,7 +50,8 @@ datarangers-sdk-php是 [DataRangers](https://datarangers.com.cn/) 的用户行�
             "domain" => "https://xxxx",
             "ak" => getenv("OPENAPI_AK"),
             "sk" => getenv("OPENAPI_SK")
-        ]
+        ],
+        "http_timeout"=> 10000
     ]);
    
     ```

@@ -18,7 +18,8 @@ CollectorConfig::init_datarangers_collector([
         "domain" => "https://analytics.volcengineapi.com",
         "ak" => getenv("OPENAPI_AK"),
         "sk" => getenv("OPENAPI_SK")
-    ]
+    ],
+    "http_timeout"=> 10000
 ]);
 
 $rc = new AppEventCollector();
