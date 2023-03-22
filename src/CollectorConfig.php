@@ -30,7 +30,7 @@ class CollectorConfig
 
     public static function init_datarangers_collector($config)
     {
-        if (self::get($config, "save", false)) {
+        if (self::getKey($config, "save", false)) {
             self::setSAVE(true);
             self::setSEND(false);
         } else {
@@ -44,11 +44,11 @@ class CollectorConfig
             throw new RangersSDKException(Constants::$DOMAIN_EXCPETION);
         }
 
-        self::setLogFilePath(self::get($config, "logger_file_prefix", "logs/datarangers/"));
-        self::setLogFileName(self::get($config, "logger_file_name", "datarangers"));
-        self::setLogMaxMB(self::get($config, "log_max_mb", 100));
-        self::setSenderHeader(self::get($config, "headers", []));
-        self::setHttpTimeout(self::get($config, "http_timeout", 1000));
+        self::setLogFilePath(self::getKey($config, "logger_file_prefix", "logs/datarangers/"));
+        self::setLogFileName(self::getKey($config, "logger_file_name", "datarangers"));
+        self::setLogMaxMB(self::getKey($config, "log_max_mb", 100));
+        self::setSenderHeader(self::getKey($config, "headers", []));
+        self::setHttpTimeout(self::getKey($config, "http_timeout", 1000));
 
         # Saas
         self::setEnv(self::getKey($config, "env", ""));

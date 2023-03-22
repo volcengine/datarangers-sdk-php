@@ -4,7 +4,6 @@ require '../vendor/autoload.php';
 
 use DataRangers\AppEventCollector;
 use DataRangers\CollectorConfig;
-use DataRangers\HttpConsumer;
 use DataRangers\Model\Header;
 
 CollectorConfig::init_datarangers_collector([
@@ -13,7 +12,8 @@ CollectorConfig::init_datarangers_collector([
     "headers" => [
         "Host" => getenv("HTTP_HOST"),
         "Content-Type" => "application/json"
-    ]
+    ],
+    "http_timeout"=> 10000
 ]);
 $rc = new AppEventCollector();
 
