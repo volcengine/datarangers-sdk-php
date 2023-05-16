@@ -55,6 +55,26 @@ class Header implements \JsonSerializable
     private $vendor_id;
     private $ssid;
 
+    private $anonymous_id;
+
+    /**
+     * @return mixed
+     */
+    public function getAnonymousId(): string
+    {
+        return $this->anonymous_id;
+    }
+
+    /**
+     * @param mixed $anonymous_id
+     */
+    public function setAnonymousId(string $anonymous_id): void
+    {
+        $this->anonymous_id = $anonymous_id;
+    }
+
+
+
     /**
      * @return mixed
      */
@@ -750,6 +770,9 @@ class Header implements \JsonSerializable
         if ($this->user_unique_id != null) $data["user_unique_id"] = $this->user_unique_id;
         if ($this->vendor_id != null) $data["vendor_id"] = $this->vendor_id;
         if ($this->ssid != null) $data["ssid"] = $this->ssid;
+        if ($this->anonymous_id != null) {
+            $data["anonymous_id"] = $this->anonymous_id;
+        }
         return $data;
     }
 }
