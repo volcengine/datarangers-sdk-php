@@ -9,6 +9,8 @@
 namespace DataRangers;
 
 
+use DataRangers\Model\Header;
+
 interface Collector
 {
     /**
@@ -74,6 +76,43 @@ interface Collector
      * @return mixed
      */
     public function profileAppend($userUniqueId, $appId, $eventParams);
+
+
+    /**
+     * set user profile
+     * @param $header Header
+     * @param $eventParams array set profile example ["php_version"=>"1.3.0"]
+     * @return mixed
+     */
+    public function profileSetWithHeader($header, $eventParams);
+
+    /**
+     * @param $header Header
+     * @param $eventParams array unset profile example ["php_version"=>""]. unset php_version
+     * @return mixed
+     */
+    public function profileUnsetWithHeader($header, $eventParams);
+
+    /**
+     * @param $header Header
+     * @param $eventParams array set once profile example ["php_version"=>"1.1"]. set php_version only once
+     * @return mixed
+     */
+    public function profileSetOnceWithHeader($header, $eventParams);
+
+    /**
+     * @param $header Header
+     * @param $eventParams array increment profile example ["php_example"=>10]. php_example=php_example+10
+     * @return mixed
+     */
+    public function profileIncrementWithHeader($header, $eventParams);
+
+    /**
+     * @param $header Header
+     * @param $eventParams array append profile example ["php_version"=>["1.1","1.2"]]. append php_version
+     * @return mixed
+     */
+    public function profileAppendWithHeader($header, $eventParams);
 
     /**
      * @param $appId int app id

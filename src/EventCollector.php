@@ -99,6 +99,14 @@ class EventCollector implements Collector
         $header = new Header();
         $header->setAppId($appId);
         $header->setUserUniqueId($userUniqueId);
+        $this->profileHeader($header, $eventName, $eventParams);
+    }
+
+    public function profileHeader($header, $eventName, $eventParams)
+    {
+        $appId = $header->getAppId();
+        $userUniqueId = $header->getUserUniqueId();
+
         $events = [];
         $event = new Event($userUniqueId);
         $event->setEvent($eventName);
@@ -150,6 +158,31 @@ class EventCollector implements Collector
     public function profileAppend($userUniqueId, $appId, $eventParams)
     {
         $this->profile($userUniqueId, $appId, ProfileMethod::APPEND, $eventParams);
+    }
+
+    public function profileSetWithHeader($header, $eventParams)
+    {
+        $this->profileHeader($header, ProfileMethod::SET, $eventParams);
+    }
+
+    public function profileUnsetWithHeader($header, $eventParams)
+    {
+        $this->profileHeader($header, ProfileMethod::UN_SET, $eventParams);
+    }
+
+    public function profileSetOnceWithHeader($header, $eventParams)
+    {
+        $this->profileHeader($header, ProfileMethod::SET_ONCE, $eventParams);
+    }
+
+    public function profileIncrementWithHeader($header, $eventParams)
+    {
+        $this->profileHeader($header, ProfileMethod::INCREMENT, $eventParams);
+    }
+
+    public function profileAppendWithHeader($header, $eventParams)
+    {
+        $this->profileHeader($header, ProfileMethod::APPEND, $eventParams);
     }
 
     public function itemSet($appId, $itemName, $items)
@@ -266,5 +299,4 @@ class EventCollector implements Collector
             $event->setItems($eventWithItems);
         }
     }
-
 }

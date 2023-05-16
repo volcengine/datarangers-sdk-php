@@ -5,6 +5,7 @@ require '../vendor/autoload.php';
 use DataRangers\AppEventCollector;
 use DataRangers\CollectorConfig;
 use DataRangers\Model\Header;
+use DataRangers\WebEventCollector;
 
 CollectorConfig::init_datarangers_collector([
     "domain" => getenv("HTTP_DOMAIN"),
@@ -76,5 +77,21 @@ $rc->sendEvent("test-uuid1", 10000001, null, ["php_event_with_item"],
     [["php_name" => "php", "php_version" => "5.6"]], [
         [["item_name" => "book", "item_id" => "0001"], ["item_name" => "book", "item_id" => "0002"]]
     ]);
+
+$header2 = new Header();
+$header2->setAppId(10000000);
+$header2->setUserUniqueId("");
+$header2->setDeviceId(7033713549469860107);
+$rc->profileSetWithHeader($header2, ["profile_php_name" => "php7", "profile_php_version" => "7.4", "profile_int" => 2, "testdate"=>"2023-05-16"]);
+
+// anonymousId
+$webRc = new WebEventCollector();
+$header3 = new Header();
+$header3->setAppId(10000000);
+$header3->setUserUniqueId("");
+$header3->setAnonymousId("test_anonymousId1");
+$webRc->sendUserDefineEvent($header3, "", 10000000, null, "php_event_with_anonymous_id",
+    ["php_name" => "php", "php_version" => "5.6", "float_param" => floatval(5), "session_id" => "1234567890"]);
+
 
 sleep(10);
