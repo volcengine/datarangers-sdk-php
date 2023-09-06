@@ -71,13 +71,11 @@ datarangers-sdk-php是 [DataRangers](https://datarangers.com.cn/) 的用户行�
    1. 私有化，请联系部署运维人员获取
    2. saas，根据接入的环境配置不同的地址：
       1. saas版本国内站：https://mcs.ctobsnssdk.com
-      2. SaaS版国际站: https://mcs.tobsnssdk.com
-      3. SaaS云原生版: https://gator.volces.com
+      2. SaaS版国际站: https://mcs.tobsnssdk.com
    3. SAAS 上如果上报 item 和用户属性，需要设置openapi：
       1. domain:
          1. SaaS版国内站: https://analytics.volcengineapi.com
          2. SaaS版国际站: https://analytics.byteplusapi.com
-         3. SaaS云原生版: https://analytics.volcengineapi.com
       4. ak/sk 请联系客户经理获取
 
 5. 执行代码
