@@ -25,21 +25,31 @@ datarangers-sdk-php是 [DataRangers](https://datarangers.com.cn/) 的用户行�
     ```
 4. 首先加载配置项
     ```php
-    # 私有化部署场景
+    # 私有化部署场景 logagent模式
     CollectorConfig::init_datarangers_collector([
             "domain" => "http://domain",
-            "send" => True,
+            "save" => true,
             "headers" => [
                 "Host" => "host",
                 "Content-Type" => "application/json"
             ],
             "http_timeout"=> 10000
         ]);
+   # 私有化部署场景 http 模式，Host 必须配置,Host 没有http://,https://
+   CollectorConfig::init_datarangers_collector([
+    "domain" => "https://xxxx",
+    "save" => false,
+    "headers" => [
+        "Host" => "xxxx",
+        "Content-Type" => "application/json"
+    ],
+    "http_timeout"=> 10000
+   ]);
    
     # saas 云上环境
     CollectorConfig::init_datarangers_collector([
         "domain" => "https://xxxx",
-        "send" => false,
+        "save" => false,
         "headers" => [
             "Content-Type" => "application/json"
         ],
@@ -59,12 +69,15 @@ datarangers-sdk-php是 [DataRangers](https://datarangers.com.cn/) 的用户行�
    domain 配置说明：
    1. 私有化，请联系部署运维人员获取
    2. saas，根据接入的环境配置不同的地址：
-      1. 中国区：https://mcs.ctobsnssdk.com
-      2. sg(新加坡): https://mcs.tobsnssdk.com
-      4. 如果上报 item 和用户属性，需要设置openapi：
-         1. 国内: https://analytics.volcengineapi.com
-         2. 国际是: https://datarangers.com
-         3. ak/sk 请联系客户经理获取
+      1. saas版本国内站：https://mcs.ctobsnssdk.com
+      2. SaaS版国际站: https://mcs.tobsnssdk.com
+      3. SaaS云原生版: https://gator.volces.com
+   3. SAAS 上如果上报 item 和用户属性，需要设置openapi：
+      1. domain:
+         1. SaaS版国内站: https://analytics.volcengineapi.com
+         2. SaaS版国际站: https://analytics.byteplusapi.com
+         3. SaaS云原生版: https://analytics.volcengineapi.com
+      4. ak/sk 请联系客户经理获取
 
 5. 执行代码
     ```php
