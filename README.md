@@ -39,7 +39,7 @@ datarangers-sdk-php是 [DataRangers](https://datarangers.com.cn/) 的用户行�
     # saas 云上环境
     CollectorConfig::init_datarangers_collector([
         "domain" => "https://xxxx",
-        "send" => true,
+        "send" => false,
         "headers" => [
             "Content-Type" => "application/json"
         ],
@@ -61,7 +61,6 @@ datarangers-sdk-php是 [DataRangers](https://datarangers.com.cn/) 的用户行�
    2. saas，根据接入的环境配置不同的地址：
       1. 中国区：https://mcs.ctobsnssdk.com
       2. sg(新加坡): https://mcs.tobsnssdk.com
-      3. va(美东): https://mcs.itobsnssdk.com
       4. 如果上报 item 和用户属性，需要设置openapi：
          1. 国内: https://analytics.volcengineapi.com
          2. 国际是: https://datarangers.com
