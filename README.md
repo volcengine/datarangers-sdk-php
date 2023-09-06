@@ -35,6 +35,7 @@ datarangers-sdk-php是 [DataRangers](https://datarangers.com.cn/) 的用户行�
             ],
             "http_timeout"=> 10000
         ]);
+   
    # 私有化部署场景 http 模式，Host 必须配置,Host 没有http://,https://
    CollectorConfig::init_datarangers_collector([
     "domain" => "https://xxxx",
