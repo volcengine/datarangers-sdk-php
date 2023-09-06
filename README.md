@@ -80,7 +80,7 @@ datarangers-sdk-php是 [DataRangers](https://datarangers.com.cn/) 的用户行�
 
 5. 执行代码
     ```php
-   $rc = new AppEventCollector(new HttpConsumer());
+   $rc = new AppEventCollector();
    $rc->sendEvent("uuid16980", 1001, null, [ProfileMethod::SET, "php_event"],
         [["php_name" => "php", "php_version" => "5.6"], ["php_name" => "php", "php_version" => "5.6"]]);
     
