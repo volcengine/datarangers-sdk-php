@@ -53,7 +53,7 @@ class HttpRequests
             }
             $error = curl_error($ch);
             curl_close($ch);
-            throw new \RuntimeException(sprintf('send fail, result: %s, error: %s', $result, $error), 0);
+            throw new \RuntimeException(sprintf('send fail, result: %s, error: %s, body: %s', $result, $error, $sendBody), 0);
         }
         $content_json = json_decode($content);
         if (property_exists($content_json, "code")) {
