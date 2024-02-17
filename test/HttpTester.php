@@ -94,4 +94,15 @@ $webRc->sendUserDefineEvent($header3, "", 10000000, null, "php_event_with_anonym
     ["php_name" => "php", "php_version" => "5.6", "float_param" => floatval(5), "session_id" => "1234567890"]);
 
 
+
+// user_unique_id_type
+$appRc = new AppEventCollector();
+$header3 = new Header();
+$header3->setAppId(10000000);
+$header3->setUserUniqueIdType("phone_id");
+$appRc->sendUserDefineEvent($header3, "test_sdk_phone_id1", 10000000, null, "php_event_with_anonymous_id",
+    ["php_name" => "php", "php_version" => "5.6", "float_param" => floatval(5), "session_id" => "1234567890"]);
+
+
 sleep(10);
+printf("end");

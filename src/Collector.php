@@ -17,8 +17,8 @@ interface Collector
      * @param $userUniqueId string uuid
      * @param $appId int appid
      * @param $custom array 自定义属性
-     * @param $eventName object 事件名,可以为array
-     * @param $eventParams object 事件参数,可以为array,与$eventName 长度相同
+     * @param $eventName object 事件名,可以为array。当为array的时候，表示多个事件，$eventParams 应该为[[]]。
+     * @param $eventParams object 事件参数,为array,数组个数与$eventName 长度相同。
      * @param $items object item参数,可以为array,与$eventName 长度相同
 
      * 例如 $eventName $eventParams, $items 分别为

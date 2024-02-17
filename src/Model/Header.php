@@ -57,6 +57,8 @@ class Header implements \JsonSerializable
 
     private $anonymous_id;
 
+    private $user_unique_id_type;
+
     /**
      * @return mixed
      */
@@ -725,6 +727,22 @@ class Header implements \JsonSerializable
         $this->client_ip = $client_ip;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUserUniqueIdType()
+    {
+        return $this->user_unique_id_type;
+    }
+
+    /**
+     * @param mixed $user_unique_id_type
+     */
+    public function setUserUniqueIdType($user_unique_id_type): void
+    {
+        $this->user_unique_id_type = $user_unique_id_type;
+    }
+
     public function jsonSerialize()
     {
         $data = [];
@@ -773,6 +791,10 @@ class Header implements \JsonSerializable
         if ($this->anonymous_id != null) {
             $data["anonymous_id"] = $this->anonymous_id;
         }
+        if($this->user_unique_id_type !=null){
+            $data["user_unique_id_type"] = $this->user_unique_id_type;
+        }
         return $data;
     }
+
 }
