@@ -12,7 +12,7 @@ class Message
 {
     private $messageEnv;
     private $messageType;
-    private AppMessage $appMessage;
+    private $appMessage;
 
     /**
      * @return mixed
