@@ -11,7 +11,6 @@ CollectorConfig::init_datarangers_collector([
     "domain" => getenv("HTTP_DOMAIN"),
     "save" => false,
     "headers" => [
-        "Host" => getenv("HTTP_HOST"),
         "Content-Type" => "application/json"
     ],
     "http_timeout"=> 10000
