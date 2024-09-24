@@ -30,18 +30,16 @@ datarangers-sdk-php是 [DataRangers](https://datarangers.com.cn/) 的用户行�
             "domain" => "http://domain",
             "save" => true,
             "headers" => [
-                "Host" => "host",
                 "Content-Type" => "application/json"
             ],
             "http_timeout"=> 10000
         ]);
    
-   # 私有化部署场景 http 模式，Host 必须配置,Host 没有http://,https://
+   # 私有化部署场景 http 模式
    CollectorConfig::init_datarangers_collector([
     "domain" => "https://xxxx",
     "save" => false,
     "headers" => [
-        "Host" => "xxxx",
         "Content-Type" => "application/json"
     ],
     "http_timeout"=> 10000
