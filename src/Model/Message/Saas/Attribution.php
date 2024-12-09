@@ -69,7 +69,7 @@ class Attribution implements \JsonSerializable
         if ($this->name != null) {
             $data["name"] = $this->name;
         }
-        if ($this->value != null) {
+        if ($this->value !== null) {
             $data["value"] = $this->value;
         }
         if ($this->operation != null) {

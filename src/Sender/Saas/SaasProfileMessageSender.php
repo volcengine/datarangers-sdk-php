@@ -16,7 +16,7 @@ class SaasProfileMessageSender implements MessageSender
     public function send(Message $message): void
     {
         $sendMessage = new SaasProfileAppMessage($message);
-        $body = json_encode($sendMessage);
+        $body = json_encode($sendMessage, JSON_PRESERVE_ZERO_FRACTION);
         $appMessage = $message->getAppMessage();
         $openapi = CollectorConfig::getOpenapi();
         $urlPath = sprintf(SaasProfileMessageSender::$path, $appMessage->getAppId(), $appMessage->getUserUniqueId());

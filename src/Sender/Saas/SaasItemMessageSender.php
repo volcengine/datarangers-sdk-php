@@ -22,7 +22,7 @@ class SaasItemMessageSender implements MessageSender
         $content = json_encode(array(
             "code" => "200",
             "message" => "success"
-        ));
+        ), JSON_PRESERVE_ZERO_FRACTION);
         foreach ($events as $event) {
             /** @var Event $event */
             $objectEvent = $event;
@@ -32,7 +32,7 @@ class SaasItemMessageSender implements MessageSender
             $sendMessage = new SaasItemAppMessage($objectEvent);
             $urlPath = sprintf(SaasItemMessageSender::$path, $appMessage->getAppId(), $item_name, $item_id);
             $url = ($openapi->getDomain()) . $urlPath;
-            $body = json_encode($sendMessage);
+            $body = json_encode($sendMessage, JSON_PRESERVE_ZERO_FRACTION);
             $method = "PUT";
 
             $authorization = AuthUtils::sign($openapi->getAk(), $openapi->getSk(), 1800, $method, $urlPath, null, $body);
