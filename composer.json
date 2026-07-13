@@ -1,11 +1,11 @@
 {
-    "name": "datarangers/datarangers",
+    "name": "datarangersnew/datarangersnew",
     "description": "DataRangers服务端埋点PHP SDK",
     "type": "library",
     "license": "Apache-2.0",
     "authors": [
         {
-            "name": "datarangers",
+            "name": "datarangersnew",
             "email": "datarangers-opensource@bytedance.com"
         }
     ],
@@ -14,5 +14,7 @@
             "DataRangers\\": "src/"
         }
     },
-    "require": {}
+    "require": {
+        "php": ">=7.2"
+    }
 }

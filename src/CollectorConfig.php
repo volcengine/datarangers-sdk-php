@@ -25,8 +25,8 @@ class CollectorConfig
     public static $INIT_FLAG;
     public static $HTTP_TIMEOUT;
     public static $DOMAIN;
-    public static OpenapiConfig $openapi;
-    public static array $appKeys;
+    public static $openapi;
+    public static $appKeys;
 
     public static function init_datarangers_collector($config)
     {
